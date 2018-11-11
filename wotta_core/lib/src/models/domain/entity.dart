@@ -1,7 +1,7 @@
 
 abstract class Entity {
 
-  String id();
+  String provideId();
   String typeName();
   bool isSaved();
 

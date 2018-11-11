@@ -1,10 +1,12 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:wotta_core/wotta_core.dart';
+import 'package:wotta_flutter/connectors/entity_form_connector.dart';
 import 'package:wotta_flutter/connectors/workouts_connector.dart';
 import 'package:wotta_flutter/keys.dart';
+import 'package:wotta_flutter/presentation/commons.dart';
 import 'package:wotta_flutter/routes.dart';
 
 class WorkoutsView extends StatelessWidget {
@@ -117,126 +119,203 @@ class WorkoutDetailView extends StatelessWidget {
 
   static final GlobalKey<FormFieldState<String>> _titleKey =
       GlobalKey<FormFieldState<String>>();
+
+  static final GlobalKey<FormFieldState<String>> _warmupDurattionKey =
+    GlobalKey<FormFieldState<String>>();
+
+  static final GlobalKey<FormFieldState<String>> _cooldownDurattionKey =
+    GlobalKey<FormFieldState<String>>();
+
+  static final GlobalKey<FormFieldState<String>> _numberOfActivityKey =
+    GlobalKey<FormFieldState<String>>();
+
+  static final GlobalKey<FormFieldState<String>> _interActivityRestDurationKey =
+    GlobalKey<FormFieldState<String>>();
+
   static final GlobalKey<FormFieldState<String>> _noteKey =
       GlobalKey<FormFieldState<String>>();
 
   static final GlobalKey<FormFieldState<String>> _numberOfSeries =
-  GlobalKey<FormFieldState<String>>();
+      GlobalKey<FormFieldState<String>>();
+
+  static final GlobalKey<OptionValueFormFieldState> _serieDuration = GlobalKey<OptionValueFormFieldState>();
+
+  static final GlobalKey<OptionValueFormFieldState> _restDuration = GlobalKey<OptionValueFormFieldState>();
 
   final Workout workout;
   final OnConfirmWorkout confirmCallback;
+
 
   WorkoutDetailView(
       {@required Key key,
       @required this.workout,
       @required this.confirmCallback})
-      : super(key: key);
+      : assert(workout != null), super(key: key);
 
-  bool _isEditing() => workout.isSeved();
+  bool _isEditing() => workout.isSaved();
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
-    print("Building WorkoutDetailView ...");
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _isEditing() ? "Editing Workout" : "Create new Workout",
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          onChanged: () {
-              print("Eccoci: " + (new DateTime.now().millisecondsSinceEpoch).toString());
+    return StoreConnection<WottaAppState, WottaActions, Null>(
+        builder: (context, Null, actions) {
+          /*
+            initialize EntityEditingStatus before build form
+           */
+          actions.updateEntityEditingStatus(EntityEditingStatus((b) => b
+            ..entity = workout
+            ..inputIsValid = workout.isSaved()));
 
+          return EntityFormConnector(
+            formKey: _formKey,
+            formBody: ListView(
+              children: [
+                TextFormField(
+                  initialValue: workout.title,
+                  key: _titleKey,
+                  autofocus: !_isEditing(),
+                  style: textTheme.headline,
+                  decoration: InputDecoration(
+                    hintText: 'Add workout title',
+                  ),
+                  validator: (val) {
+                    return val.trim().isEmpty
+                        ? 'Please enter same text for the title'
+                        : null;
+                  },
+                ),
+
+                Row(children: <Widget>[
+                  Expanded(child: TextFormField(
+                    initialValue: workout.uniformWorkoutDefinition.warmupDurationSecs
+                        .toString(),
+                    key: _warmupDurattionKey,
+                    decoration: InputDecoration(labelText: "Warmup Duration (s)"),
+                    validator: (val) {
+                      final parsed = int.tryParse(val) ?? (-1);
+                      return parsed < 0
+                          ? "Non negative number is required"
+                          : null;
+                    },
+                  )),
+                  Expanded(child: TextFormField(
+                    initialValue: workout.uniformWorkoutDefinition.calldownDurationSecs
+                        .toString(),
+                    key: _cooldownDurattionKey,
+                    decoration: InputDecoration(labelText: "Cooldown Duration (s)"),
+                    validator: (val) {
+                      final parsed = int.tryParse(val) ?? (-1);
+                      return parsed < 0
+                          ? "Non negative number is required"
+                          : null;
+                    },
+                  )),
+                ]),
+
+                Row(children: <Widget>[
+                  Expanded(child: TextFormField(
+                    initialValue: workout.uniformWorkoutDefinition.numberOfActivity.toString(),
+                    key: _numberOfActivityKey,
+                    decoration: InputDecoration(labelText: "Number of Activities"),
+                    validator: (val) {
+                      final parsed = int.tryParse(val) ?? (-1);
+                      return parsed < 0
+                          ? "Non negative number is required"
+                          : null;
+                    },
+                  )),
+                  Expanded(child: TextFormField(
+                    initialValue: workout.uniformWorkoutDefinition.interActivityRestDurationSec.toString(),
+                    key: _interActivityRestDurationKey,
+                    decoration: InputDecoration(labelText: "Inter Acticity Rest (s)"),
+                    validator: (val) {
+                      final parsed = int.tryParse(val) ?? (-1);
+                      return parsed < 0
+                          ? "Non negative number is required"
+                          : null;
+                    },
+                  )),
+                ]),
+
+                TextFormField(
+                  initialValue: workout.uniformWorkoutDefinition
+                      .activityDefinition.numberOfSeries
+                      .toString(),
+                  key: _numberOfSeries,
+                  decoration: InputDecoration(labelText: "Number of Series:"),
+                  validator: (val) {
+                    final parsed = int.tryParse(val) ?? (-1);
+                    return parsed < 0
+                        ? "Non negative number is required"
+                        : null;
+                  },
+                ),
+                OptionValueFormField(
+                  key: _serieDuration,
+                  isIntialCheck: workout.uniformWorkoutDefinition.activityDefinition.manualStopSerie,
+                  initialValue: workout.uniformWorkoutDefinition.activityDefinition.serieDurationSecs?.toString() ?? "30",
+                  labelForValue: "Work Duration (s)",
+                  textWhenChecked: "Manually stop work",
+                  valueValidator: (val) {
+                        final parsed = int.tryParse(val) ?? (-1);
+                        return parsed < 0
+                            ? "Non negative number is required"
+                            : null;
+                      },
+                ),
+                OptionValueFormField(
+                  key: _restDuration,
+                  isIntialCheck: workout.uniformWorkoutDefinition.activityDefinition.manualStopRest,
+                  initialValue: workout.uniformWorkoutDefinition.activityDefinition.restDurationSecs?.toString() ?? "45",
+                  labelForValue: "Rest Duration (s)",
+                  textWhenChecked: "Manually stop rest",
+                  valueValidator: (val) {
+                    final parsed = int.tryParse(val) ?? (-1);
+                    return parsed < 0
+                        ? "Non negative number is required"
+                        : null;
+                  },
+                ),TextFormField(
+                  initialValue: workout.notes,
+                  key: _noteKey,
+                  maxLines: 10,
+                  style: textTheme.subhead,
+                  decoration: InputDecoration(
+                    hintText: 'Additional Notes...',
+                  ),
+                )
+              ],
+            ),
+            confirmCallack: () {
+              confirmCallback(workout.rebuild((b) => b
+                ..title = _titleKey.currentState.value
+                ..notes = _noteKey.currentState.value
+
+                ..uniformWorkoutDefinition.warmupDurationSecs =
+                  int.parse(_warmupDurattionKey.currentState.value)
+                ..uniformWorkoutDefinition.calldownDurationSecs =
+                  int.parse(_cooldownDurattionKey.currentState.value)
+                ..uniformWorkoutDefinition.numberOfActivity =
+                  int.parse(_numberOfActivityKey.currentState.value)
+                ..uniformWorkoutDefinition.interActivityRestDurationSec=
+                  int.parse(_interActivityRestDurationKey.currentState.value)
+
+                ..uniformWorkoutDefinition.activityDefinition.numberOfSeries =
+                    int.parse(_numberOfSeries.currentState.value)
+                ..uniformWorkoutDefinition.activityDefinition.manualStopSerie =
+                    _serieDuration.currentState.check
+                ..uniformWorkoutDefinition.activityDefinition.serieDurationSecs =
+                    int.tryParse(_serieDuration.currentState.value) ?? null
+                ..uniformWorkoutDefinition.activityDefinition.manualStopRest =
+                    _restDuration.currentState.check
+                ..uniformWorkoutDefinition.activityDefinition.restDurationSecs =
+                    int.tryParse(_restDuration.currentState.value) ?? null
+
+                ));
+              Navigator.pop(context);
             },
-          autovalidate: true,
-          child: ListView(
-            children: [
-              TextFormField(
-                initialValue: workout.title,
-                key: _titleKey,
-                autofocus: !_isEditing(),
-                style: textTheme.headline,
-                decoration: InputDecoration(
-                  hintText: 'Add workout title',
-                ),
-                validator: (val) {
-                  return val.trim().isEmpty
-                      ? 'Please enter same text for the title'
-                      : null;
-                },
-              ),
-              TextFormField(
-                initialValue: workout.uniformWorkoutDefinition.activityDefinition.numberOfSeries.toString(),
-                key: _numberOfSeries,
-                decoration: InputDecoration(
-                  labelText: "Number of Series:"
-                ),
-                validator: (val) {
-                  final parsed = int.tryParse(val) ?? (-1);
-                  return parsed < 0 ? "Non negative number is required" : null;
-                },
-              ),
-              TextFormField(
-                initialValue: workout.notes,
-                key: _noteKey,
-                maxLines: 10,
-                style: textTheme.subhead,
-                decoration: InputDecoration(
-                  hintText: 'Additional Notes...',
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: _isEditing() ? 'Save changes' : 'Add Workout',
-        child: Icon(_isEditing() ? Icons.check : Icons.add),
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            confirmCallback(workout.rebuild((b) => b
-              ..title = _titleKey.currentState.value
-              ..notes = _noteKey.currentState.value
-              ..uniformWorkoutDefinition.activityDefinition.numberOfSeries = int.parse(_numberOfSeries.currentState.value)));
-
-            Navigator.pop(context);
-          } else {
-//            _formKey.currentState.reset();
-          }
+          );
         },
-      )
-    );
+        connect: (state) => null);
   }
-}
-
-class FormStateButton extends StatefulWidget{
-
-  FloatingActionButton button;
-
-  FormStateButton(this.button);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _FormStateButtonState();
-  }
-
-  refesrh() {
-
-  }
-}
-
-class _FormStateButtonState extends State<FormStateButton> {
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.button;
-  }
-
-
-
 }

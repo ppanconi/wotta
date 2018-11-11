@@ -3,11 +3,12 @@ library workout;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:wotta_core/src/models/domain/uniform_workout_definition.dart';
+import 'package:wotta_core/wotta_core.dart';
 
 part 'workout.g.dart';
 
 
-abstract class Workout implements Built<Workout, WorkoutBuilder> {
+abstract class Workout implements Built<Workout, WorkoutBuilder>, Entity {
   // Add serialization support by defining this static getter.
   static Serializer<Workout> get serializer => _$workoutSerializer;
 
@@ -27,6 +28,17 @@ abstract class Workout implements Built<Workout, WorkoutBuilder> {
         ..update(updates)
       );
 
-  bool isSeved() => id != null;
+  bool isSaved() => id != null;
+
+  @override
+  String typeName() {
+    return "Workout";
+  }
+
+  @override
+  String provideId() {
+    return id;
+  }
+
 
 }

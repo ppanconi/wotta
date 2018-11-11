@@ -9,6 +9,7 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.saveWorkoutAction, saveWorkout)
   ..add(WottaActionsNames.createNewWorkoutAction, createNewWorkout)
   ..add(WottaActionsNames.restoreWorkoutAction, restoreworkout)
+  ..add(WottaActionsNames.updateEntityEditingStatus, updateEntityEditingStatus)
 ;
 
 void addworkout(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {

@@ -20,7 +20,7 @@ void main() {
 
     test('Todo not save', () {
       final notSaved  = workout.rebuild((b) => b.id = null);
-      expect(notSaved.isSeved(), false);
+      expect(notSaved.isSaved(), false);
     });
 
   });
