@@ -28,7 +28,6 @@ class EntityFormConnector
         child: Form(
             key: formKey,
             onChanged: () {
-              print("Form changed ${new DateTime.now().millisecondsSinceEpoch}");
               actions.updateEntityEditingStatus(EntityEditingStatus((b) => b
                ..entity = entity
               ..inputIsValid = formKey.currentState.validate()));
@@ -48,6 +47,8 @@ class EntityFormConnector
                 //            _formKey.currentState.reset();
               }
             } : null,
+            backgroundColor: state.inputIsValid ?
+              ThemeData.fallback().accentColor : Colors.black12,
           );
         },
         connect: (state) => state.currentEditingStatus,

@@ -32,7 +32,8 @@ class WorkoutsView extends StatelessWidget {
 }
 
 class WorkoutList extends StatelessWidget {
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final _biggerFont = const TextStyle(fontSize: 20.0);
+  final _smallFont = const TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic);
 
   final BuiltList<Workout> workouts;
   final Function(Workout) onRemove;
@@ -105,9 +106,13 @@ class WorkoutList extends StatelessWidget {
         workout.title,
         style: _biggerFont,
       ),
-//        trailing: Icon(Icons.favorite_border,
-//            color: Colors.red
-//        ),
+      subtitle: Text(workout.notes, style: _smallFont, overflow: TextOverflow.ellipsis),
+      trailing: FlatButton(
+          onPressed: null,
+          child: Icon(Icons.play_circle_outline,
+                color: Colors.red
+          )
+      ),
     );
   }
 }
