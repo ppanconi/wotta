@@ -24,7 +24,7 @@ abstract class Workout implements Built<Workout, WorkoutBuilder>, Entity {
 
   factory Workout([void updates(WorkoutBuilder b)]) =>
       _$Workout((b) => b
-        ..uniformWorkoutDefinition = UniformWorkoutDefinition.stadard((d) => {}).toBuilder()
+        ..uniformWorkoutDefinition = UniformWorkoutDefinition.standard((d) => {}).toBuilder()
         ..update(updates)
       );
 

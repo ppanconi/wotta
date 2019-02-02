@@ -53,7 +53,7 @@ abstract class UniformWorkoutDefinition implements Built<UniformWorkoutDefinitio
   UniformWorkoutDefinition._();
   factory UniformWorkoutDefinition([void updates(UniformWorkoutDefinitionBuilder b)]) = _$UniformWorkoutDefinition;
 
-  factory UniformWorkoutDefinition.stadard([void updates(UniformWorkoutDefinitionBuilder b)]) {
+  factory UniformWorkoutDefinition.standard([void updates(UniformWorkoutDefinitionBuilder b)]) {
     return (new UniformWorkoutDefinition((ub) => ub
         ..warmupDurationSecs = 180
         ..numberOfActivity = 9
