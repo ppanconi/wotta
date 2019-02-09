@@ -21,6 +21,17 @@ part of serializers;
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ActivityDefinition.serializer)
+      ..add(ActivityDefinitionSequenceItem.serializer)
+      ..add(ActivityUniformDefinition.serializer)
+      ..add(ActivityWork.serializer)
       ..add(UniformWorkoutDefinition.serializer)
-      ..add(Workout.serializer))
+      ..add(Workout.serializer)
+      ..add(WorkoutDefinition.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList,
+              const [const FullType(ActivityDefinitionSequenceItem)]),
+          () => new ListBuilder<ActivityDefinitionSequenceItem>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ActivityWork)]),
+          () => new ListBuilder<ActivityWork>()))
     .build();

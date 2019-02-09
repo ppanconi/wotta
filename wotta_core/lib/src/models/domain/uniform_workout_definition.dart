@@ -5,9 +5,9 @@ import 'package:built_value/serializer.dart';
 
 part 'uniform_workout_definition.g.dart';
 
-abstract class ActivityDefinition implements Built<ActivityDefinition, ActivityDefinitionBuilder> {
+abstract class ActivityUniformDefinition implements Built<ActivityUniformDefinition, ActivityUniformDefinitionBuilder> {
   // Add serialization support by defining this static getter.
-  static Serializer<ActivityDefinition> get serializer => _$activityDefinitionSerializer;
+  static Serializer<ActivityUniformDefinition> get serializer => _$activityUniformDefinitionSerializer;
 
   int get numberOfSeries;
   bool get manualStopSerie;
@@ -17,13 +17,13 @@ abstract class ActivityDefinition implements Built<ActivityDefinition, ActivityD
   @nullable
   int get restDurationSecs;
 
-  ActivityDefinition._();
+  ActivityUniformDefinition._();
 
-  factory ActivityDefinition([void updates(ActivityDefinitionBuilder b)]) = _$ActivityDefinition;
+  factory ActivityUniformDefinition([void updates(ActivityUniformDefinitionBuilder b)]) = _$ActivityUniformDefinition;
 
-  factory ActivityDefinition.stadard([void updates(ActivityDefinitionBuilder b)]) {
+  factory ActivityUniformDefinition.stadard([void updates(ActivityUniformDefinitionBuilder b)]) {
 
-    return (new ActivityDefinition((b) => b
+    return (new ActivityUniformDefinition((b) => b
         ..numberOfSeries = 3
         ..manualStopSerie = true
         ..manualStopRest = false
@@ -42,7 +42,7 @@ abstract class UniformWorkoutDefinition implements Built<UniformWorkoutDefinitio
 
   int get warmupDurationSecs;
 
-  ActivityDefinition get activityDefinition;
+  ActivityUniformDefinition get activityDefinition;
 
   int get numberOfActivity;
 
@@ -59,7 +59,7 @@ abstract class UniformWorkoutDefinition implements Built<UniformWorkoutDefinitio
         ..numberOfActivity = 9
         ..interActivityRestDurationSec = 75
         ..calldownDurationSecs = 180
-        ..activityDefinition = new ActivityDefinition.stadard((b) => {}).toBuilder()
+        ..activityDefinition = new ActivityUniformDefinition.stadard((b) => {}).toBuilder()
     ).toBuilder()
       ..update(updates)).build();
   }

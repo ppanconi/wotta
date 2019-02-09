@@ -16,7 +16,7 @@ class WorkoutsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seved workouts:'),
+        title: Text('Workouts'),
       ),
       body: WorkoutsConnetor(),
       floatingActionButton: FloatingActionButton(

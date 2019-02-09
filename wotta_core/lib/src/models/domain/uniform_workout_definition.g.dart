@@ -19,20 +19,23 @@ part of uniform_workout_definition;
 // ignore_for_file: unnecessary_new
 // ignore_for_file: test_types_in_equals
 
-Serializer<ActivityDefinition> _$activityDefinitionSerializer =
-    new _$ActivityDefinitionSerializer();
+Serializer<ActivityUniformDefinition> _$activityUniformDefinitionSerializer =
+    new _$ActivityUniformDefinitionSerializer();
 Serializer<UniformWorkoutDefinition> _$uniformWorkoutDefinitionSerializer =
     new _$UniformWorkoutDefinitionSerializer();
 
-class _$ActivityDefinitionSerializer
-    implements StructuredSerializer<ActivityDefinition> {
+class _$ActivityUniformDefinitionSerializer
+    implements StructuredSerializer<ActivityUniformDefinition> {
   @override
-  final Iterable<Type> types = const [ActivityDefinition, _$ActivityDefinition];
+  final Iterable<Type> types = const [
+    ActivityUniformDefinition,
+    _$ActivityUniformDefinition
+  ];
   @override
-  final String wireName = 'ActivityDefinition';
+  final String wireName = 'ActivityUniformDefinition';
 
   @override
-  Iterable serialize(Serializers serializers, ActivityDefinition object,
+  Iterable serialize(Serializers serializers, ActivityUniformDefinition object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'numberOfSeries',
@@ -62,9 +65,10 @@ class _$ActivityDefinitionSerializer
   }
 
   @override
-  ActivityDefinition deserialize(Serializers serializers, Iterable serialized,
+  ActivityUniformDefinition deserialize(
+      Serializers serializers, Iterable serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ActivityDefinitionBuilder();
+    final result = new ActivityUniformDefinitionBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -118,7 +122,7 @@ class _$UniformWorkoutDefinitionSerializer
           specifiedType: const FullType(int)),
       'activityDefinition',
       serializers.serialize(object.activityDefinition,
-          specifiedType: const FullType(ActivityDefinition)),
+          specifiedType: const FullType(ActivityUniformDefinition)),
       'numberOfActivity',
       serializers.serialize(object.numberOfActivity,
           specifiedType: const FullType(int)),
@@ -161,8 +165,8 @@ class _$UniformWorkoutDefinitionSerializer
           break;
         case 'activityDefinition':
           result.activityDefinition.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(ActivityDefinition))
-              as ActivityDefinition);
+                  specifiedType: const FullType(ActivityUniformDefinition))
+              as ActivityUniformDefinition);
           break;
         case 'numberOfActivity':
           result.numberOfActivity = serializers.deserialize(value,
@@ -183,7 +187,7 @@ class _$UniformWorkoutDefinitionSerializer
   }
 }
 
-class _$ActivityDefinition extends ActivityDefinition {
+class _$ActivityUniformDefinition extends ActivityUniformDefinition {
   @override
   final int numberOfSeries;
   @override
@@ -195,10 +199,11 @@ class _$ActivityDefinition extends ActivityDefinition {
   @override
   final int restDurationSecs;
 
-  factory _$ActivityDefinition([void updates(ActivityDefinitionBuilder b)]) =>
-      (new ActivityDefinitionBuilder()..update(updates)).build();
+  factory _$ActivityUniformDefinition(
+          [void updates(ActivityUniformDefinitionBuilder b)]) =>
+      (new ActivityUniformDefinitionBuilder()..update(updates)).build();
 
-  _$ActivityDefinition._(
+  _$ActivityUniformDefinition._(
       {this.numberOfSeries,
       this.manualStopSerie,
       this.serieDurationSecs,
@@ -207,30 +212,31 @@ class _$ActivityDefinition extends ActivityDefinition {
       : super._() {
     if (numberOfSeries == null) {
       throw new BuiltValueNullFieldError(
-          'ActivityDefinition', 'numberOfSeries');
+          'ActivityUniformDefinition', 'numberOfSeries');
     }
     if (manualStopSerie == null) {
       throw new BuiltValueNullFieldError(
-          'ActivityDefinition', 'manualStopSerie');
+          'ActivityUniformDefinition', 'manualStopSerie');
     }
     if (manualStopRest == null) {
       throw new BuiltValueNullFieldError(
-          'ActivityDefinition', 'manualStopRest');
+          'ActivityUniformDefinition', 'manualStopRest');
     }
   }
 
   @override
-  ActivityDefinition rebuild(void updates(ActivityDefinitionBuilder b)) =>
+  ActivityUniformDefinition rebuild(
+          void updates(ActivityUniformDefinitionBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ActivityDefinitionBuilder toBuilder() =>
-      new ActivityDefinitionBuilder()..replace(this);
+  ActivityUniformDefinitionBuilder toBuilder() =>
+      new ActivityUniformDefinitionBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ActivityDefinition &&
+    return other is ActivityUniformDefinition &&
         numberOfSeries == other.numberOfSeries &&
         manualStopSerie == other.manualStopSerie &&
         serieDurationSecs == other.serieDurationSecs &&
@@ -250,7 +256,7 @@ class _$ActivityDefinition extends ActivityDefinition {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ActivityDefinition')
+    return (newBuiltValueToStringHelper('ActivityUniformDefinition')
           ..add('numberOfSeries', numberOfSeries)
           ..add('manualStopSerie', manualStopSerie)
           ..add('serieDurationSecs', serieDurationSecs)
@@ -260,9 +266,10 @@ class _$ActivityDefinition extends ActivityDefinition {
   }
 }
 
-class ActivityDefinitionBuilder
-    implements Builder<ActivityDefinition, ActivityDefinitionBuilder> {
-  _$ActivityDefinition _$v;
+class ActivityUniformDefinitionBuilder
+    implements
+        Builder<ActivityUniformDefinition, ActivityUniformDefinitionBuilder> {
+  _$ActivityUniformDefinition _$v;
 
   int _numberOfSeries;
   int get numberOfSeries => _$this._numberOfSeries;
@@ -289,9 +296,9 @@ class ActivityDefinitionBuilder
   set restDurationSecs(int restDurationSecs) =>
       _$this._restDurationSecs = restDurationSecs;
 
-  ActivityDefinitionBuilder();
+  ActivityUniformDefinitionBuilder();
 
-  ActivityDefinitionBuilder get _$this {
+  ActivityUniformDefinitionBuilder get _$this {
     if (_$v != null) {
       _numberOfSeries = _$v.numberOfSeries;
       _manualStopSerie = _$v.manualStopSerie;
@@ -304,22 +311,22 @@ class ActivityDefinitionBuilder
   }
 
   @override
-  void replace(ActivityDefinition other) {
+  void replace(ActivityUniformDefinition other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$ActivityDefinition;
+    _$v = other as _$ActivityUniformDefinition;
   }
 
   @override
-  void update(void updates(ActivityDefinitionBuilder b)) {
+  void update(void updates(ActivityUniformDefinitionBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$ActivityDefinition build() {
+  _$ActivityUniformDefinition build() {
     final _$result = _$v ??
-        new _$ActivityDefinition._(
+        new _$ActivityUniformDefinition._(
             numberOfSeries: numberOfSeries,
             manualStopSerie: manualStopSerie,
             serieDurationSecs: serieDurationSecs,
@@ -336,7 +343,7 @@ class _$UniformWorkoutDefinition extends UniformWorkoutDefinition {
   @override
   final int warmupDurationSecs;
   @override
-  final ActivityDefinition activityDefinition;
+  final ActivityUniformDefinition activityDefinition;
   @override
   final int numberOfActivity;
   @override
@@ -438,10 +445,10 @@ class UniformWorkoutDefinitionBuilder
   set warmupDurationSecs(int warmupDurationSecs) =>
       _$this._warmupDurationSecs = warmupDurationSecs;
 
-  ActivityDefinitionBuilder _activityDefinition;
-  ActivityDefinitionBuilder get activityDefinition =>
-      _$this._activityDefinition ??= new ActivityDefinitionBuilder();
-  set activityDefinition(ActivityDefinitionBuilder activityDefinition) =>
+  ActivityUniformDefinitionBuilder _activityDefinition;
+  ActivityUniformDefinitionBuilder get activityDefinition =>
+      _$this._activityDefinition ??= new ActivityUniformDefinitionBuilder();
+  set activityDefinition(ActivityUniformDefinitionBuilder activityDefinition) =>
       _$this._activityDefinition = activityDefinition;
 
   int _numberOfActivity;
