@@ -17,6 +17,10 @@ abstract class WottaActions extends ReduxActions {
 
   ActionDispatcher<EntityEditingStatus> updateEntityEditingStatus;
 
+  ActionDispatcher<Workout> explodeWorkoutDefinition;
+
+  ActionDispatcher<Workout> startWorkoutExecution;
+
   WottaActions._();
 
   factory WottaActions() => _$WottaActions();

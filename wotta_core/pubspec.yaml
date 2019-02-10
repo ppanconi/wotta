@@ -8,7 +8,7 @@ environment:
   sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
-  built_redux: ^7.4.5
+  built_redux: ^7.5.0
   built_value: ^6.1.2
 #  path: ^1.4.1
 

@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:wotta_core/src/uuid.dart';
 import '../actions/actions.dart';
@@ -11,6 +12,37 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.restoreWorkoutAction, restoreworkout)
   ..add(WottaActionsNames.updateEntityEditingStatus, updateEntityEditingStatus)
 ;
+
+void explodeWorkoutDefinition(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {
+
+  var workout = action.payload;
+
+  var uniformDef = workout.uniformWorkoutDefinition;
+
+  WorkoutDefinition.simple(
+      uniformDef.warmupDurationSecs,
+      uniformDef.calldownDurationSecs,
+      (b) => b..activityDefinitionSequence.update((l) {
+        for( var i = 0; i <= uniformDef.numberOfActivity; i++) {
+
+          l.add(ActivityDefinitionSequenceItem((b) => b
+            ..restBetweenActivity = uniformDef.interActivityRestDurationSec
+            ..activityDefinition = ActivityDefinition((b) => b
+                ..name = 'Activity ${i + 1}'
+                ..activityWorkSequence.update( (b) {
+                  for (var j = 0; j <= uniformDef.activityDefinition.numberOfSeries; j++) {
+                    b.add(ActivityWork((b) => b
+
+                    ));
+                  }
+                })
+            ).toBuilder()
+          ));
+        };
+      })
+  );
+
+}
 
 void addworkout(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {
 

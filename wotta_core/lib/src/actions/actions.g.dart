@@ -26,6 +26,10 @@ class _$WottaActions extends WottaActions {
   final ActionDispatcher<EntityEditingStatus> updateEntityEditingStatus =
       new ActionDispatcher<EntityEditingStatus>(
           'WottaActions-updateEntityEditingStatus');
+  final ActionDispatcher<Workout> explodeWorkoutDefinition =
+      new ActionDispatcher<Workout>('WottaActions-explodeWorkoutDefinition');
+  final ActionDispatcher<Workout> startWorkoutExecution =
+      new ActionDispatcher<Workout>('WottaActions-startWorkoutExecution');
 
   @override
   void setDispatcher(Dispatcher dispatcher) {
@@ -35,6 +39,8 @@ class _$WottaActions extends WottaActions {
     saveWorkoutAction.setDispatcher(dispatcher);
     createNewWorkoutAction.setDispatcher(dispatcher);
     updateEntityEditingStatus.setDispatcher(dispatcher);
+    explodeWorkoutDefinition.setDispatcher(dispatcher);
+    startWorkoutExecution.setDispatcher(dispatcher);
   }
 }
 
@@ -52,4 +58,8 @@ class WottaActionsNames {
   static final ActionName<EntityEditingStatus> updateEntityEditingStatus =
       new ActionName<EntityEditingStatus>(
           'WottaActions-updateEntityEditingStatus');
+  static final ActionName<Workout> explodeWorkoutDefinition =
+      new ActionName<Workout>('WottaActions-explodeWorkoutDefinition');
+  static final ActionName<Workout> startWorkoutExecution =
+      new ActionName<Workout>('WottaActions-startWorkoutExecution');
 }

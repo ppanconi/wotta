@@ -20,6 +20,9 @@ abstract class Workout implements Built<Workout, WorkoutBuilder>, Entity {
 
   UniformWorkoutDefinition get uniformWorkoutDefinition;
 
+  @nullable
+  WorkoutDefinition get workoutDefinition;
+
   Workout._();
 
   factory Workout([void updates(WorkoutBuilder b)]) =>

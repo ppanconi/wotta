@@ -1,3 +1,4 @@
+
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,9 @@ class WorkoutList extends StatelessWidget {
       ),
       subtitle: Text(workout.notes, style: _smallFont, overflow: TextOverflow.ellipsis),
       trailing: FlatButton(
-          onPressed: null,
+          onPressed: () {
+            Navigator.pushNamed(context, WottaRoutes.startWorkout);
+          },
           child: Icon(Icons.play_circle_outline,
                 color: Colors.red
           )

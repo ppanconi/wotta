@@ -50,6 +50,12 @@ class _$WorkoutSerializer implements StructuredSerializer<Workout> {
         ..add(serializers.serialize(object.notes,
             specifiedType: const FullType(String)));
     }
+    if (object.workoutDefinition != null) {
+      result
+        ..add('workoutDefinition')
+        ..add(serializers.serialize(object.workoutDefinition,
+            specifiedType: const FullType(WorkoutDefinition)));
+    }
 
     return result;
   }
@@ -82,6 +88,11 @@ class _$WorkoutSerializer implements StructuredSerializer<Workout> {
                   specifiedType: const FullType(UniformWorkoutDefinition))
               as UniformWorkoutDefinition);
           break;
+        case 'workoutDefinition':
+          result.workoutDefinition.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(WorkoutDefinition))
+              as WorkoutDefinition);
+          break;
       }
     }
 
@@ -98,11 +109,18 @@ class _$Workout extends Workout {
   final String notes;
   @override
   final UniformWorkoutDefinition uniformWorkoutDefinition;
+  @override
+  final WorkoutDefinition workoutDefinition;
 
   factory _$Workout([void updates(WorkoutBuilder b)]) =>
       (new WorkoutBuilder()..update(updates)).build();
 
-  _$Workout._({this.id, this.title, this.notes, this.uniformWorkoutDefinition})
+  _$Workout._(
+      {this.id,
+      this.title,
+      this.notes,
+      this.uniformWorkoutDefinition,
+      this.workoutDefinition})
       : super._() {
     if (title == null) {
       throw new BuiltValueNullFieldError('Workout', 'title');
@@ -126,14 +144,16 @@ class _$Workout extends Workout {
         id == other.id &&
         title == other.title &&
         notes == other.notes &&
-        uniformWorkoutDefinition == other.uniformWorkoutDefinition;
+        uniformWorkoutDefinition == other.uniformWorkoutDefinition &&
+        workoutDefinition == other.workoutDefinition;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, id.hashCode), title.hashCode), notes.hashCode),
-        uniformWorkoutDefinition.hashCode));
+        $jc($jc($jc($jc(0, id.hashCode), title.hashCode), notes.hashCode),
+            uniformWorkoutDefinition.hashCode),
+        workoutDefinition.hashCode));
   }
 
   @override
@@ -142,7 +162,8 @@ class _$Workout extends Workout {
           ..add('id', id)
           ..add('title', title)
           ..add('notes', notes)
-          ..add('uniformWorkoutDefinition', uniformWorkoutDefinition))
+          ..add('uniformWorkoutDefinition', uniformWorkoutDefinition)
+          ..add('workoutDefinition', workoutDefinition))
         .toString();
   }
 }
@@ -170,6 +191,12 @@ class WorkoutBuilder implements Builder<Workout, WorkoutBuilder> {
           UniformWorkoutDefinitionBuilder uniformWorkoutDefinition) =>
       _$this._uniformWorkoutDefinition = uniformWorkoutDefinition;
 
+  WorkoutDefinitionBuilder _workoutDefinition;
+  WorkoutDefinitionBuilder get workoutDefinition =>
+      _$this._workoutDefinition ??= new WorkoutDefinitionBuilder();
+  set workoutDefinition(WorkoutDefinitionBuilder workoutDefinition) =>
+      _$this._workoutDefinition = workoutDefinition;
+
   WorkoutBuilder();
 
   WorkoutBuilder get _$this {
@@ -178,6 +205,7 @@ class WorkoutBuilder implements Builder<Workout, WorkoutBuilder> {
       _title = _$v.title;
       _notes = _$v.notes;
       _uniformWorkoutDefinition = _$v.uniformWorkoutDefinition?.toBuilder();
+      _workoutDefinition = _$v.workoutDefinition?.toBuilder();
       _$v = null;
     }
     return this;
@@ -205,12 +233,15 @@ class WorkoutBuilder implements Builder<Workout, WorkoutBuilder> {
               id: id,
               title: title,
               notes: notes,
-              uniformWorkoutDefinition: uniformWorkoutDefinition.build());
+              uniformWorkoutDefinition: uniformWorkoutDefinition.build(),
+              workoutDefinition: _workoutDefinition?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'uniformWorkoutDefinition';
         uniformWorkoutDefinition.build();
+        _$failedField = 'workoutDefinition';
+        _workoutDefinition?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Workout', _$failedField, e.toString());
