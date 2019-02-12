@@ -63,6 +63,42 @@ main() {
       expect(store.state.workouts.elementAt(0) , isNot(equals(added)));
       expect(store.state.workouts, [updated]);
     });
+
+    test('Explode Workout test', () {
+      final added = store.state.workouts.elementAt(0);
+      
+      expect(added.workoutDefinition , isNull);
+      
+      store.actions.explodeWorkoutDefinition(added);
+      
+      var exploded = store.state.workouts.elementAt(0);
+      expect(exploded.workoutDefinition , isNotNull);
+      expect(exploded.workoutDefinition.warmup.workDurationSecs ,
+          equals(added.uniformWorkoutDefinition.warmupDurationSecs));
+      expect(exploded.workoutDefinition.cooldown.workDurationSecs ,
+          equals(added.uniformWorkoutDefinition.calldownDurationSecs));
+
+      expect(exploded.workoutDefinition.activityDefinitionSequence.length ,
+          equals(added.uniformWorkoutDefinition.numberOfActivity));
+
+      for(var i = 0; i < exploded.workoutDefinition.activityDefinitionSequence.length; i++) {
+        var actDefSeq = exploded.workoutDefinition.activityDefinitionSequence[i];
+
+        expect(actDefSeq.restBetweenActivity ,
+            equals(added.uniformWorkoutDefinition.interActivityRestDurationSec));
+
+        expect(actDefSeq.activityDefinition.name,
+            equals('Activity ${i + 1}'));
+
+        expect(actDefSeq.activityDefinition.activityWorkSequence.length,
+            equals(added.uniformWorkoutDefinition.activityDefinition.numberOfSeries));
+
+      }
+
+
+
+    });
+
   });
 
 }
