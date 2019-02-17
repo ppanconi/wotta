@@ -12,7 +12,77 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.restoreWorkoutAction, restoreworkout)
   ..add(WottaActionsNames.updateEntityEditingStatus, updateEntityEditingStatus)
   ..add(WottaActionsNames.explodeWorkoutDefinition, explodeWorkoutDefinition)
+  ..add(WottaActionsNames.startWorkoutExecution, startWorkoutExecution)
 ;
+
+void startWorkoutExecution(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {
+
+  var workout = action.payload;
+  var workoutDefinition = workout.workoutDefinition;
+  if (workoutDefinition == null) {
+    workoutDefinition = makeDefinitionFromUniformDefinition(workout.uniformWorkoutDefinition);
+  }
+
+  var executionItemsBuilder = ListBuilder<InnerWorkoutExecutionItem>();
+
+  if ( ! workoutDefinition.warmup.isWithoutWorkDuration) {
+     executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
+          ..type = WorkoutExecutionItemType.WARMUP
+          ..activityWork = workoutDefinition.warmup.toBuilder()
+     ));
+  }
+
+  workoutDefinition.activityDefinitionSequence.toList(growable: false).forEach( (activity) {
+
+    activity.activityDefinition.activityWorkSequence.toList(growable: false).forEach( (work) {
+
+      if ( ! work.isWithoutWorkDuration) {
+        executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
+          ..activitySequenceItem = activity.toBuilder()
+          ..type = WorkoutExecutionItemType.WORK
+          ..activityWork = work.toBuilder()
+        ));
+      }
+
+      if ( ! work.isWithoutRestDuration) {
+        executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
+          ..activitySequenceItem = activity.toBuilder()
+          ..type = WorkoutExecutionItemType.REST
+          ..activityWork = work.toBuilder()
+        ));
+      }
+
+    });
+
+    if (activity.restBetweenActivity > 0) {
+      executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
+        ..activitySequenceItem = activity.toBuilder()
+        ..type = WorkoutExecutionItemType.INTER_ACTIVITY_REST
+      ));
+    }
+  });
+
+  if ( ! workoutDefinition.warmup.isWithoutWorkDuration) {
+    executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
+      ..type = WorkoutExecutionItemType.COOLDOWN
+      ..activityWork = workoutDefinition.cooldown.toBuilder()
+    ));
+  }
+
+  var executionItems = executionItemsBuilder.build();
+  if (executionItems.length > 0) {
+    builder.executor = Executor( (b) => b
+      ..execution = WorkoutExecution(InnerWorkoutExecution( (b) => b
+        ..workout = workout.toBuilder()
+        ..definition = workoutDefinition.toBuilder()
+        ..executionItems = executionItemsBuilder
+      ))
+      ..currentExecutionItem = WorkoutExecutionItem(executionItems[0])
+      ..isPaused = true
+    );
+  }
+
+}
 
 void explodeWorkoutDefinition(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {
 

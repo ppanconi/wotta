@@ -75,6 +75,8 @@ abstract class ActivityDefinition implements Built<ActivityDefinition, ActivityD
 abstract class ActivityWork implements Built<ActivityWork, ActivityWorkBuilder> {
   // Add serialization support by defining this static getter.
   static Serializer<ActivityWork> get serializer => _$activityWorkSerializer;
+  ActivityWork._();
+  factory ActivityWork([void updates(ActivityWorkBuilder b)]) = _$ActivityWork;
 
   @nullable
   int get numberOfRepetitions;
@@ -89,7 +91,10 @@ abstract class ActivityWork implements Built<ActivityWork, ActivityWorkBuilder> 
   @nullable
   int get restDurationSecs;
 
-  ActivityWork._();
+  bool get isWithoutWorkDuration => ! manualWorkStop && workDurationSecs == 0;
 
-  factory ActivityWork([void updates(ActivityWorkBuilder b)]) = _$ActivityWork;
+  bool get isWithoutRestDuration => ! manualRestStop && restDurationSecs == 0;
+
+  bool get isWithoutDuration =>  isWithoutRestDuration && isWithoutWorkDuration;
+
 }

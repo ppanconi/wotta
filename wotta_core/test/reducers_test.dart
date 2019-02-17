@@ -95,6 +95,22 @@ main() {
 
       }
 
+    });
+
+    test('Start Workout Execution test', () {
+
+      final wokout = store.state.workouts.elementAt(0);
+
+      print(workout);
+
+      expect(workout.workoutDefinition , isNull);
+      expect(store.state.executor, isNull);
+
+      store.actions.startWorkoutExecution(workout);
+
+      expect(store.state.executor, isNotNull);
+
+      print(store.state.executor);
 
 
     });

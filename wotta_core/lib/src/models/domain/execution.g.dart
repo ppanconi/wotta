@@ -19,10 +19,65 @@ part of execution;
 // ignore_for_file: unnecessary_new
 // ignore_for_file: test_types_in_equals
 
+Serializer<Executor> _$executorSerializer = new _$ExecutorSerializer();
 Serializer<InnerWorkoutExecution> _$innerWorkoutExecutionSerializer =
     new _$InnerWorkoutExecutionSerializer();
 Serializer<InnerWorkoutExecutionItem> _$innerWorkoutExecutionItemSerializer =
     new _$InnerWorkoutExecutionItemSerializer();
+
+class _$ExecutorSerializer implements StructuredSerializer<Executor> {
+  @override
+  final Iterable<Type> types = const [Executor, _$Executor];
+  @override
+  final String wireName = 'Executor';
+
+  @override
+  Iterable serialize(Serializers serializers, Executor object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'execution',
+      serializers.serialize(object.execution,
+          specifiedType: const FullType(Execution)),
+      'currentExecutionItem',
+      serializers.serialize(object.currentExecutionItem,
+          specifiedType: const FullType(ExecutionItem)),
+      'isPaused',
+      serializers.serialize(object.isPaused,
+          specifiedType: const FullType(bool)),
+    ];
+
+    return result;
+  }
+
+  @override
+  Executor deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ExecutorBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'execution':
+          result.execution = serializers.deserialize(value,
+              specifiedType: const FullType(Execution)) as Execution;
+          break;
+        case 'currentExecutionItem':
+          result.currentExecutionItem = serializers.deserialize(value,
+              specifiedType: const FullType(ExecutionItem)) as ExecutionItem;
+          break;
+        case 'isPaused':
+          result.isPaused = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$InnerWorkoutExecutionSerializer
     implements StructuredSerializer<InnerWorkoutExecution> {
@@ -44,8 +99,8 @@ class _$InnerWorkoutExecutionSerializer
       'definition',
       serializers.serialize(object.definition,
           specifiedType: const FullType(WorkoutDefinition)),
-      'workoutItems',
-      serializers.serialize(object.workoutItems,
+      'executionItems',
+      serializers.serialize(object.executionItems,
           specifiedType: const FullType(
               BuiltList, const [const FullType(InnerWorkoutExecutionItem)])),
     ];
@@ -74,8 +129,8 @@ class _$InnerWorkoutExecutionSerializer
                   specifiedType: const FullType(WorkoutDefinition))
               as WorkoutDefinition);
           break;
-        case 'workoutItems':
-          result.workoutItems.replace(serializers.deserialize(value,
+        case 'executionItems':
+          result.executionItems.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(InnerWorkoutExecutionItem)
               ])) as BuiltList);
@@ -102,7 +157,8 @@ class _$InnerWorkoutExecutionItemSerializer
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'type',
-      serializers.serialize(object.type, specifiedType: const FullType(String)),
+      serializers.serialize(object.type,
+          specifiedType: const FullType(WorkoutExecutionItemType)),
       'startWorkTimestampsSec',
       serializers.serialize(object.startWorkTimestampsSec,
           specifiedType:
@@ -151,7 +207,8 @@ class _$InnerWorkoutExecutionItemSerializer
           break;
         case 'type':
           result.type = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+                  specifiedType: const FullType(WorkoutExecutionItemType))
+              as WorkoutExecutionItemType;
           break;
         case 'startWorkTimestampsSec':
           result.startWorkTimestampsSec.replace(serializers.deserialize(value,
@@ -172,19 +229,130 @@ class _$InnerWorkoutExecutionItemSerializer
   }
 }
 
+class _$Executor extends Executor {
+  @override
+  final Execution execution;
+  @override
+  final ExecutionItem currentExecutionItem;
+  @override
+  final bool isPaused;
+
+  factory _$Executor([void updates(ExecutorBuilder b)]) =>
+      (new ExecutorBuilder()..update(updates)).build();
+
+  _$Executor._({this.execution, this.currentExecutionItem, this.isPaused})
+      : super._() {
+    if (execution == null) {
+      throw new BuiltValueNullFieldError('Executor', 'execution');
+    }
+    if (currentExecutionItem == null) {
+      throw new BuiltValueNullFieldError('Executor', 'currentExecutionItem');
+    }
+    if (isPaused == null) {
+      throw new BuiltValueNullFieldError('Executor', 'isPaused');
+    }
+  }
+
+  @override
+  Executor rebuild(void updates(ExecutorBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ExecutorBuilder toBuilder() => new ExecutorBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is Executor &&
+        execution == other.execution &&
+        currentExecutionItem == other.currentExecutionItem &&
+        isPaused == other.isPaused;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc(0, execution.hashCode), currentExecutionItem.hashCode),
+        isPaused.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('Executor')
+          ..add('execution', execution)
+          ..add('currentExecutionItem', currentExecutionItem)
+          ..add('isPaused', isPaused))
+        .toString();
+  }
+}
+
+class ExecutorBuilder implements Builder<Executor, ExecutorBuilder> {
+  _$Executor _$v;
+
+  Execution _execution;
+  Execution get execution => _$this._execution;
+  set execution(Execution execution) => _$this._execution = execution;
+
+  ExecutionItem _currentExecutionItem;
+  ExecutionItem get currentExecutionItem => _$this._currentExecutionItem;
+  set currentExecutionItem(ExecutionItem currentExecutionItem) =>
+      _$this._currentExecutionItem = currentExecutionItem;
+
+  bool _isPaused;
+  bool get isPaused => _$this._isPaused;
+  set isPaused(bool isPaused) => _$this._isPaused = isPaused;
+
+  ExecutorBuilder();
+
+  ExecutorBuilder get _$this {
+    if (_$v != null) {
+      _execution = _$v.execution;
+      _currentExecutionItem = _$v.currentExecutionItem;
+      _isPaused = _$v.isPaused;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(Executor other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$Executor;
+  }
+
+  @override
+  void update(void updates(ExecutorBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$Executor build() {
+    final _$result = _$v ??
+        new _$Executor._(
+            execution: execution,
+            currentExecutionItem: currentExecutionItem,
+            isPaused: isPaused);
+    replace(_$result);
+    return _$result;
+  }
+}
+
 class _$InnerWorkoutExecution extends InnerWorkoutExecution {
   @override
   final Workout workout;
   @override
   final WorkoutDefinition definition;
   @override
-  final BuiltList<InnerWorkoutExecutionItem> workoutItems;
+  final BuiltList<InnerWorkoutExecutionItem> executionItems;
 
   factory _$InnerWorkoutExecution(
           [void updates(InnerWorkoutExecutionBuilder b)]) =>
       (new InnerWorkoutExecutionBuilder()..update(updates)).build();
 
-  _$InnerWorkoutExecution._({this.workout, this.definition, this.workoutItems})
+  _$InnerWorkoutExecution._(
+      {this.workout, this.definition, this.executionItems})
       : super._() {
     if (workout == null) {
       throw new BuiltValueNullFieldError('InnerWorkoutExecution', 'workout');
@@ -192,9 +360,9 @@ class _$InnerWorkoutExecution extends InnerWorkoutExecution {
     if (definition == null) {
       throw new BuiltValueNullFieldError('InnerWorkoutExecution', 'definition');
     }
-    if (workoutItems == null) {
+    if (executionItems == null) {
       throw new BuiltValueNullFieldError(
-          'InnerWorkoutExecution', 'workoutItems');
+          'InnerWorkoutExecution', 'executionItems');
     }
   }
 
@@ -212,13 +380,13 @@ class _$InnerWorkoutExecution extends InnerWorkoutExecution {
     return other is InnerWorkoutExecution &&
         workout == other.workout &&
         definition == other.definition &&
-        workoutItems == other.workoutItems;
+        executionItems == other.executionItems;
   }
 
   @override
   int get hashCode {
     return $jf($jc($jc($jc(0, workout.hashCode), definition.hashCode),
-        workoutItems.hashCode));
+        executionItems.hashCode));
   }
 
   @override
@@ -226,7 +394,7 @@ class _$InnerWorkoutExecution extends InnerWorkoutExecution {
     return (newBuiltValueToStringHelper('InnerWorkoutExecution')
           ..add('workout', workout)
           ..add('definition', definition)
-          ..add('workoutItems', workoutItems))
+          ..add('executionItems', executionItems))
         .toString();
   }
 }
@@ -245,11 +413,11 @@ class InnerWorkoutExecutionBuilder
   set definition(WorkoutDefinitionBuilder definition) =>
       _$this._definition = definition;
 
-  ListBuilder<InnerWorkoutExecutionItem> _workoutItems;
-  ListBuilder<InnerWorkoutExecutionItem> get workoutItems =>
-      _$this._workoutItems ??= new ListBuilder<InnerWorkoutExecutionItem>();
-  set workoutItems(ListBuilder<InnerWorkoutExecutionItem> workoutItems) =>
-      _$this._workoutItems = workoutItems;
+  ListBuilder<InnerWorkoutExecutionItem> _executionItems;
+  ListBuilder<InnerWorkoutExecutionItem> get executionItems =>
+      _$this._executionItems ??= new ListBuilder<InnerWorkoutExecutionItem>();
+  set executionItems(ListBuilder<InnerWorkoutExecutionItem> executionItems) =>
+      _$this._executionItems = executionItems;
 
   InnerWorkoutExecutionBuilder();
 
@@ -257,7 +425,7 @@ class InnerWorkoutExecutionBuilder
     if (_$v != null) {
       _workout = _$v.workout?.toBuilder();
       _definition = _$v.definition?.toBuilder();
-      _workoutItems = _$v.workoutItems?.toBuilder();
+      _executionItems = _$v.executionItems?.toBuilder();
       _$v = null;
     }
     return this;
@@ -284,7 +452,7 @@ class InnerWorkoutExecutionBuilder
           new _$InnerWorkoutExecution._(
               workout: workout.build(),
               definition: definition.build(),
-              workoutItems: workoutItems.build());
+              executionItems: executionItems.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -292,8 +460,8 @@ class InnerWorkoutExecutionBuilder
         workout.build();
         _$failedField = 'definition';
         definition.build();
-        _$failedField = 'workoutItems';
-        workoutItems.build();
+        _$failedField = 'executionItems';
+        executionItems.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'InnerWorkoutExecution', _$failedField, e.toString());
@@ -311,7 +479,7 @@ class _$InnerWorkoutExecutionItem extends InnerWorkoutExecutionItem {
   @override
   final ActivityWork activityWork;
   @override
-  final String type;
+  final WorkoutExecutionItemType type;
   @override
   final BuiltList<int> startWorkTimestampsSec;
   @override
@@ -404,9 +572,9 @@ class InnerWorkoutExecutionItemBuilder
   set activityWork(ActivityWorkBuilder activityWork) =>
       _$this._activityWork = activityWork;
 
-  String _type;
-  String get type => _$this._type;
-  set type(String type) => _$this._type = type;
+  WorkoutExecutionItemType _type;
+  WorkoutExecutionItemType get type => _$this._type;
+  set type(WorkoutExecutionItemType type) => _$this._type = type;
 
   ListBuilder<int> _startWorkTimestampsSec;
   ListBuilder<int> get startWorkTimestampsSec =>

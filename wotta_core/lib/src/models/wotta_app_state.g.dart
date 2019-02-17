@@ -54,6 +54,12 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
         ..add(serializers.serialize(object.currentEditingStatus,
             specifiedType: const FullType(EntityEditingStatus)));
     }
+    if (object.executor != null) {
+      result
+        ..add('executor')
+        ..add(serializers.serialize(object.executor,
+            specifiedType: const FullType(Executor)));
+    }
 
     return result;
   }
@@ -91,6 +97,10 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
                   specifiedType: const FullType(EntityEditingStatus))
               as EntityEditingStatus);
           break;
+        case 'executor':
+          result.executor = serializers.deserialize(value,
+              specifiedType: const FullType(Executor)) as Executor;
+          break;
       }
     }
 
@@ -109,6 +119,8 @@ class _$WottaAppState extends WottaAppState {
   final Workout creatingWorkout;
   @override
   final EntityEditingStatus currentEditingStatus;
+  @override
+  final Executor executor;
 
   factory _$WottaAppState([void updates(WottaAppStateBuilder b)]) =>
       (new WottaAppStateBuilder()..update(updates)).build();
@@ -118,7 +130,8 @@ class _$WottaAppState extends WottaAppState {
       this.statusReport,
       this.workouts,
       this.creatingWorkout,
-      this.currentEditingStatus})
+      this.currentEditingStatus,
+      this.executor})
       : super._() {
     if (status == null) {
       throw new BuiltValueNullFieldError('WottaAppState', 'status');
@@ -146,17 +159,20 @@ class _$WottaAppState extends WottaAppState {
         statusReport == other.statusReport &&
         workouts == other.workouts &&
         creatingWorkout == other.creatingWorkout &&
-        currentEditingStatus == other.currentEditingStatus;
+        currentEditingStatus == other.currentEditingStatus &&
+        executor == other.executor;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
-                workouts.hashCode),
-            creatingWorkout.hashCode),
-        currentEditingStatus.hashCode));
+            $jc(
+                $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
+                    workouts.hashCode),
+                creatingWorkout.hashCode),
+            currentEditingStatus.hashCode),
+        executor.hashCode));
   }
 
   @override
@@ -166,7 +182,8 @@ class _$WottaAppState extends WottaAppState {
           ..add('statusReport', statusReport)
           ..add('workouts', workouts)
           ..add('creatingWorkout', creatingWorkout)
-          ..add('currentEditingStatus', currentEditingStatus))
+          ..add('currentEditingStatus', currentEditingStatus)
+          ..add('executor', executor))
         .toString();
   }
 }
@@ -200,6 +217,10 @@ class WottaAppStateBuilder
   set currentEditingStatus(EntityEditingStatusBuilder currentEditingStatus) =>
       _$this._currentEditingStatus = currentEditingStatus;
 
+  Executor _executor;
+  Executor get executor => _$this._executor;
+  set executor(Executor executor) => _$this._executor = executor;
+
   WottaAppStateBuilder();
 
   WottaAppStateBuilder get _$this {
@@ -209,6 +230,7 @@ class WottaAppStateBuilder
       _workouts = _$v.workouts?.toBuilder();
       _creatingWorkout = _$v.creatingWorkout?.toBuilder();
       _currentEditingStatus = _$v.currentEditingStatus?.toBuilder();
+      _executor = _$v.executor;
       _$v = null;
     }
     return this;
@@ -237,7 +259,8 @@ class WottaAppStateBuilder
               statusReport: statusReport,
               workouts: workouts.build(),
               creatingWorkout: _creatingWorkout?.build(),
-              currentEditingStatus: _currentEditingStatus?.build());
+              currentEditingStatus: _currentEditingStatus?.build(),
+              executor: executor);
     } catch (_) {
       String _$failedField;
       try {

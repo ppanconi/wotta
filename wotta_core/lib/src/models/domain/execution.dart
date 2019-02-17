@@ -7,7 +7,12 @@ import 'package:wotta_core/wotta_core.dart';
 
 part 'execution.g.dart';
 
-abstract class Executor {
+abstract class Executor implements Built<Executor, ExecutorBuilder> {
+
+  static Serializer<Executor> get serializer => _$executorSerializer;
+
+  Executor._();
+  factory Executor([void updates(ExecutorBuilder b)]) = _$Executor;
 
   Execution get execution;
 
@@ -15,11 +20,24 @@ abstract class Executor {
 
   bool get isPaused;
 
+
 }
 
 abstract class Execution {
   String get title;
   List<ExecutionItem> get items;
+
+  @override
+  String toString() {
+    return 'Execution{'
+          '\ttitle=$title,\n'
+          '\titems=[\n'
+          '\t\t${items.map( (i) => i.toString()).join(',\n\t\t') }],\n'
+          '\t'
+        '}';
+  }
+
+
 }
 
 abstract class ExecutionItem {
@@ -38,20 +56,39 @@ abstract class ExecutionItem {
   List<int> get startWorkTimestampsSec;
   List<int> get stopWorkTimestampsSec;
 
+  @override
+  String toString() {
+    return 'ExecutionItem{\n'
+            '\t\t\ttitle=$title,\n'
+            '\t\t\tsubTitle=$subTitle,\n'
+            '\t\t\tnotes=$notes,\n'
+            '\t\t\tmanualStop=$manualStop,\n'
+            '\t\t\tisRest=$isRest,\n'
+            '\t\t\tdurationSecs=$durationSecs,\n'
+        '\t\t}';
+  }
+
+
 }
 
+class WorkoutExecution extends Execution with _WorkoutExecutionMixin {
+  InnerWorkoutExecution innerWorkoutExecution;
 
-//abstract class WorkoutExecutionMixin {
-//  WorkoutExecution workoutExecution;
-//
-//  String get title {
-//    return workoutExecution.workout.title;
-//  }
-//
-//  List<ExecutionItem> get items {
-////    return workoutExecution.workoutItems;
-//  }
-//}
+  WorkoutExecution(this.innerWorkoutExecution);
+}
+
+abstract class _WorkoutExecutionMixin {
+  InnerWorkoutExecution innerWorkoutExecution;
+
+  String get title {
+    return innerWorkoutExecution.workout.title;
+  }
+  List<ExecutionItem> get items {
+    return innerWorkoutExecution.executionItems.map((i) => WorkoutExecutionItem(i)).toList();
+  }
+
+
+}
 
 
 abstract class InnerWorkoutExecution
@@ -62,7 +99,7 @@ abstract class InnerWorkoutExecution
 
   Workout get workout;
   WorkoutDefinition get definition;
-  BuiltList<InnerWorkoutExecutionItem> get workoutItems;
+  BuiltList<InnerWorkoutExecutionItem> get executionItems;
 
   InnerWorkoutExecution._();
 
@@ -70,8 +107,8 @@ abstract class InnerWorkoutExecution
 }
 
 class WorkoutExecutionItem extends ExecutionItem with _WorkoutExecutionItemMixin {
-
-  WorkoutExecutionItem(InnerWorkoutExecutionItem innerWorkoutExecutionItem);
+  InnerWorkoutExecutionItem innerWorkoutExecutionItem;
+  WorkoutExecutionItem(this.innerWorkoutExecutionItem);
 }
 
 abstract class InnerWorkoutExecutionItem
@@ -86,7 +123,7 @@ abstract class InnerWorkoutExecutionItem
   @nullable
   ActivityWork get activityWork;
 
-  String get type;
+  WorkoutExecutionItemType get type;
 
   BuiltList<int> get startWorkTimestampsSec;
   BuiltList<int> get stopWorkTimestampsSec;
@@ -104,7 +141,7 @@ abstract class _WorkoutExecutionItemMixin {
     if (innerWorkoutExecutionItem.activitySequenceItem != null) {
       return innerWorkoutExecutionItem.activitySequenceItem.activityDefinition.name;
     } else {
-      if (innerWorkoutExecutionItem.type == 'WARMUP') {
+      if (innerWorkoutExecutionItem.type == WorkoutExecutionItemType.WARMUP) {
         return 'Warmup';
       } else {
       return 'Cooldown';
@@ -140,7 +177,7 @@ abstract class _WorkoutExecutionItemMixin {
   }
 
   bool get isRest {
-    return innerWorkoutExecutionItem.type == 'REST';
+    return innerWorkoutExecutionItem.type == WorkoutExecutionItemType.REST;
   }
 
   bool get manualStop {
@@ -174,5 +211,15 @@ abstract class _WorkoutExecutionItemMixin {
   List<int> get stopWorkTimestampsSec {
     return innerWorkoutExecutionItem.stopWorkTimestampsSec.asList();
   }
+
+}
+
+enum WorkoutExecutionItemType {
+
+  WARMUP,
+  COOLDOWN,
+  REST,
+  WORK,
+  INTER_ACTIVITY_REST
 
 }

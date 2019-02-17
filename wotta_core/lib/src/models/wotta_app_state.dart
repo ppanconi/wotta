@@ -3,6 +3,7 @@ library wotta_app_state;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:wotta_core/wotta_core.dart';
 import 'domain/workout.dart';
 import 'entity_editing_status.dart';
 
@@ -22,6 +23,9 @@ abstract class WottaAppState implements Built<WottaAppState, WottaAppStateBuilde
 
   @nullable
   EntityEditingStatus  get currentEditingStatus;
+
+  @nullable
+  Executor get executor;
 
   WottaAppState._();
 
