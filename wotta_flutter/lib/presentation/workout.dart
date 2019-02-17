@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:wotta_core/wotta_core.dart';
 import 'package:wotta_flutter/connectors/entity_form_connector.dart';
+import 'package:wotta_flutter/connectors/execution_connector.dart';
 import 'package:wotta_flutter/connectors/workouts_connector.dart';
 import 'package:wotta_flutter/keys.dart';
 import 'package:wotta_flutter/presentation/commons.dart';
@@ -110,7 +111,21 @@ class WorkoutList extends StatelessWidget {
       subtitle: Text(workout.notes, style: _smallFont, overflow: TextOverflow.ellipsis),
       trailing: FlatButton(
           onPressed: () {
-            Navigator.pushNamed(context, WottaRoutes.startWorkout);
+
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) {
+                  return StoreConnection<WottaAppState, WottaActions, Null> (
+                      builder: (context, Null, actions) {
+                        actions.startWorkoutExecution(workout);
+                        return new StartWorkoutConnector();
+                      },
+                      connect: (state) => null
+                  );
+                },
+              ),
+            );
+//            Navigator.push(context,  WottaRoutes.startWorkout);
           },
           child: Icon(Icons.play_circle_outline,
                 color: Colors.red
