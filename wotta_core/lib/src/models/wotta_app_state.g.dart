@@ -98,8 +98,8 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
               as EntityEditingStatus);
           break;
         case 'executor':
-          result.executor = serializers.deserialize(value,
-              specifiedType: const FullType(Executor)) as Executor;
+          result.executor.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Executor)) as Executor);
           break;
       }
     }
@@ -217,9 +217,9 @@ class WottaAppStateBuilder
   set currentEditingStatus(EntityEditingStatusBuilder currentEditingStatus) =>
       _$this._currentEditingStatus = currentEditingStatus;
 
-  Executor _executor;
-  Executor get executor => _$this._executor;
-  set executor(Executor executor) => _$this._executor = executor;
+  ExecutorBuilder _executor;
+  ExecutorBuilder get executor => _$this._executor ??= new ExecutorBuilder();
+  set executor(ExecutorBuilder executor) => _$this._executor = executor;
 
   WottaAppStateBuilder();
 
@@ -230,7 +230,7 @@ class WottaAppStateBuilder
       _workouts = _$v.workouts?.toBuilder();
       _creatingWorkout = _$v.creatingWorkout?.toBuilder();
       _currentEditingStatus = _$v.currentEditingStatus?.toBuilder();
-      _executor = _$v.executor;
+      _executor = _$v.executor?.toBuilder();
       _$v = null;
     }
     return this;
@@ -260,7 +260,7 @@ class WottaAppStateBuilder
               workouts: workouts.build(),
               creatingWorkout: _creatingWorkout?.build(),
               currentEditingStatus: _currentEditingStatus?.build(),
-              executor: executor);
+              executor: _executor?.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -270,6 +270,8 @@ class WottaAppStateBuilder
         _creatingWorkout?.build();
         _$failedField = 'currentEditingStatus';
         _currentEditingStatus?.build();
+        _$failedField = 'executor';
+        _executor?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'WottaAppState', _$failedField, e.toString());

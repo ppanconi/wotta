@@ -30,6 +30,12 @@ class _$WottaActions extends WottaActions {
       new ActionDispatcher<Workout>('WottaActions-explodeWorkoutDefinition');
   final ActionDispatcher<Workout> startWorkoutExecution =
       new ActionDispatcher<Workout>('WottaActions-startWorkoutExecution');
+  final ActionDispatcher<Executor> togglePauseCurrentExecutionItem =
+      new ActionDispatcher<Executor>(
+          'WottaActions-togglePauseCurrentExecutionItem');
+  final ActionDispatcher<Executor> completeCurrentExecutionItem =
+      new ActionDispatcher<Executor>(
+          'WottaActions-completeCurrentExecutionItem');
 
   @override
   void setDispatcher(Dispatcher dispatcher) {
@@ -41,6 +47,8 @@ class _$WottaActions extends WottaActions {
     updateEntityEditingStatus.setDispatcher(dispatcher);
     explodeWorkoutDefinition.setDispatcher(dispatcher);
     startWorkoutExecution.setDispatcher(dispatcher);
+    togglePauseCurrentExecutionItem.setDispatcher(dispatcher);
+    completeCurrentExecutionItem.setDispatcher(dispatcher);
   }
 }
 
@@ -62,4 +70,8 @@ class WottaActionsNames {
       new ActionName<Workout>('WottaActions-explodeWorkoutDefinition');
   static final ActionName<Workout> startWorkoutExecution =
       new ActionName<Workout>('WottaActions-startWorkoutExecution');
+  static final ActionName<Executor> togglePauseCurrentExecutionItem =
+      new ActionName<Executor>('WottaActions-togglePauseCurrentExecutionItem');
+  static final ActionName<Executor> completeCurrentExecutionItem =
+      new ActionName<Executor>('WottaActions-completeCurrentExecutionItem');
 }

@@ -8,7 +8,12 @@ class StartWorkoutConnector extends StoreConnector<WottaAppState, WottaActions, 
 
   @override
   Widget build(BuildContext context, Executor executor, WottaActions actions) {
-    return ExecutionView(executor);
+    return ExecutionView(executor,
+            (ex) => actions.togglePauseCurrentExecutionItem(ex),
+            (ex) {
+                actions.completeCurrentExecutionItem(ex);
+            }
+    );
 
   }
 

@@ -21,6 +21,10 @@ abstract class WottaActions extends ReduxActions {
 
   ActionDispatcher<Workout> startWorkoutExecution;
 
+  ActionDispatcher<Executor> togglePauseCurrentExecutionItem;
+
+  ActionDispatcher<Executor> completeCurrentExecutionItem;
+
   WottaActions._();
 
   factory WottaActions() => _$WottaActions();

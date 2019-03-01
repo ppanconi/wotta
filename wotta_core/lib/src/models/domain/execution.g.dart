@@ -38,13 +38,16 @@ class _$ExecutorSerializer implements StructuredSerializer<Executor> {
       'execution',
       serializers.serialize(object.execution,
           specifiedType: const FullType(Execution)),
-      'currentExecutionItem',
-      serializers.serialize(object.currentExecutionItem,
-          specifiedType: const FullType(ExecutionItem)),
       'isPaused',
       serializers.serialize(object.isPaused,
           specifiedType: const FullType(bool)),
     ];
+    if (object.currentExecutionItem != null) {
+      result
+        ..add('currentExecutionItem')
+        ..add(serializers.serialize(object.currentExecutionItem,
+            specifiedType: const FullType(ExecutionItem)));
+    }
 
     return result;
   }
@@ -244,9 +247,6 @@ class _$Executor extends Executor {
       : super._() {
     if (execution == null) {
       throw new BuiltValueNullFieldError('Executor', 'execution');
-    }
-    if (currentExecutionItem == null) {
-      throw new BuiltValueNullFieldError('Executor', 'currentExecutionItem');
     }
     if (isPaused == null) {
       throw new BuiltValueNullFieldError('Executor', 'isPaused');

@@ -248,6 +248,9 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
   Iterable serialize(Serializers serializers, ActivityWork object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'activityWorkIndex',
+      serializers.serialize(object.activityWorkIndex,
+          specifiedType: const FullType(int)),
       'manualWorkStop',
       serializers.serialize(object.manualWorkStop,
           specifiedType: const FullType(bool)),
@@ -288,6 +291,10 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'activityWorkIndex':
+          result.activityWorkIndex = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'numberOfRepetitions':
           result.numberOfRepetitions = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -731,6 +738,8 @@ class ActivityDefinitionBuilder
 
 class _$ActivityWork extends ActivityWork {
   @override
+  final int activityWorkIndex;
+  @override
   final int numberOfRepetitions;
   @override
   final bool manualWorkStop;
@@ -745,12 +754,16 @@ class _$ActivityWork extends ActivityWork {
       (new ActivityWorkBuilder()..update(updates)).build();
 
   _$ActivityWork._(
-      {this.numberOfRepetitions,
+      {this.activityWorkIndex,
+      this.numberOfRepetitions,
       this.manualWorkStop,
       this.workDurationSecs,
       this.manualRestStop,
       this.restDurationSecs})
       : super._() {
+    if (activityWorkIndex == null) {
+      throw new BuiltValueNullFieldError('ActivityWork', 'activityWorkIndex');
+    }
     if (manualWorkStop == null) {
       throw new BuiltValueNullFieldError('ActivityWork', 'manualWorkStop');
     }
@@ -770,6 +783,7 @@ class _$ActivityWork extends ActivityWork {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ActivityWork &&
+        activityWorkIndex == other.activityWorkIndex &&
         numberOfRepetitions == other.numberOfRepetitions &&
         manualWorkStop == other.manualWorkStop &&
         workDurationSecs == other.workDurationSecs &&
@@ -782,7 +796,9 @@ class _$ActivityWork extends ActivityWork {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc(0, numberOfRepetitions.hashCode),
+                $jc(
+                    $jc($jc(0, activityWorkIndex.hashCode),
+                        numberOfRepetitions.hashCode),
                     manualWorkStop.hashCode),
                 workDurationSecs.hashCode),
             manualRestStop.hashCode),
@@ -792,6 +808,7 @@ class _$ActivityWork extends ActivityWork {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ActivityWork')
+          ..add('activityWorkIndex', activityWorkIndex)
           ..add('numberOfRepetitions', numberOfRepetitions)
           ..add('manualWorkStop', manualWorkStop)
           ..add('workDurationSecs', workDurationSecs)
@@ -804,6 +821,11 @@ class _$ActivityWork extends ActivityWork {
 class ActivityWorkBuilder
     implements Builder<ActivityWork, ActivityWorkBuilder> {
   _$ActivityWork _$v;
+
+  int _activityWorkIndex;
+  int get activityWorkIndex => _$this._activityWorkIndex;
+  set activityWorkIndex(int activityWorkIndex) =>
+      _$this._activityWorkIndex = activityWorkIndex;
 
   int _numberOfRepetitions;
   int get numberOfRepetitions => _$this._numberOfRepetitions;
@@ -834,6 +856,7 @@ class ActivityWorkBuilder
 
   ActivityWorkBuilder get _$this {
     if (_$v != null) {
+      _activityWorkIndex = _$v.activityWorkIndex;
       _numberOfRepetitions = _$v.numberOfRepetitions;
       _manualWorkStop = _$v.manualWorkStop;
       _workDurationSecs = _$v.workDurationSecs;
@@ -861,6 +884,7 @@ class ActivityWorkBuilder
   _$ActivityWork build() {
     final _$result = _$v ??
         new _$ActivityWork._(
+            activityWorkIndex: activityWorkIndex,
             numberOfRepetitions: numberOfRepetitions,
             manualWorkStop: manualWorkStop,
             workDurationSecs: workDurationSecs,

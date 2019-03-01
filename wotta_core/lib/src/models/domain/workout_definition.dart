@@ -27,11 +27,13 @@ abstract class WorkoutDefinition implements Built<WorkoutDefinition, WorkoutDefi
   factory WorkoutDefinition.simple(int warmupDurationSecs, int cooldownDurationSecs, [void updates(WorkoutDefinitionBuilder b)])
     => _$WorkoutDefinition((b) => b
         ..warmup = ActivityWork((b) => b
+          ..activityWorkIndex = 0
           ..manualRestStop = false
           ..restDurationSecs = 0
           ..manualWorkStop = false
           ..workDurationSecs = warmupDurationSecs).toBuilder()
       ..cooldown = ActivityWork((b) => b
+        ..activityWorkIndex = 0
         ..manualRestStop = false
         ..restDurationSecs = 0
         ..manualWorkStop = false
@@ -77,6 +79,8 @@ abstract class ActivityWork implements Built<ActivityWork, ActivityWorkBuilder> 
   static Serializer<ActivityWork> get serializer => _$activityWorkSerializer;
   ActivityWork._();
   factory ActivityWork([void updates(ActivityWorkBuilder b)]) = _$ActivityWork;
+
+  int get activityWorkIndex;
 
   @nullable
   int get numberOfRepetitions;

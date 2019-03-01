@@ -16,6 +16,7 @@ abstract class Executor implements Built<Executor, ExecutorBuilder> {
 
   Execution get execution;
 
+  @nullable
   ExecutionItem get currentExecutionItem;
 
   bool get isPaused;
