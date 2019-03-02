@@ -51,15 +51,15 @@ Map _togglePauseExecutionItem(Executor executor, [bool toComplete = false]) {
   };
 }
 
-void completeCurrentExecutionItem(WottaAppState state, Action<Executor> action, WottaAppStateBuilder builder) {
-  var executor = action.payload;
+void completeCurrentExecutionItem(WottaAppState state, Action<CallbackPayload<Executor>> action, WottaAppStateBuilder builder) {
+  var executor = action.payload.payload;
 
   var map = _togglePauseExecutionItem(executor, true);
   int i = map['itemIndex'];
   InnerWorkoutExecution innerExecution = map['innerExecution'];
 
   WorkoutExecutionItem nextItem =
-    (i < innerExecution.executionItems.length) ?
+    (i < innerExecution.executionItems.length - 1) ?
       WorkoutExecutionItem(innerExecution.executionItems[i + 1]): null;
 
   if (nextItem != null) {
@@ -73,7 +73,7 @@ void completeCurrentExecutionItem(WottaAppState state, Action<Executor> action, 
 
 
   builder.executor = executor.toBuilder()
-    ..isPaused = false
+    ..isPaused = nextItem == null ? true : false
     ..execution = WorkoutExecution(innerExecution)
     ..currentExecutionItem = nextItem;
 

@@ -72,8 +72,54 @@ abstract class ExecutionItem {
 
 }
 
+class WorkoutExecutionSerializer implements StructuredSerializer<WorkoutExecution> {
+  @override
+  final Iterable<Type> types = const [
+    WorkoutExecution,
+    Execution
+  ];
+
+  @override
+  String wireName = 'WorkoutExecution';
+
+  @override
+  WorkoutExecution deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+
+    InnerWorkoutExecution innerWorkoutExecution;
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'innerWorkoutExecution':
+          innerWorkoutExecution = serializers.deserialize(value,
+              specifiedType: const FullType(InnerWorkoutExecution)) as InnerWorkoutExecution;
+          break;
+      }
+    }
+
+    return WorkoutExecution(innerWorkoutExecution);
+  }
+
+  @override
+  Iterable serialize(Serializers serializers, WorkoutExecution object, {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'innerWorkoutExecution',
+      serializers.serialize(object.innerWorkoutExecution,
+          specifiedType: const FullType(InnerWorkoutExecution))
+    ];
+    return result;
+  }
+
+}
+
 class WorkoutExecution extends Execution with _WorkoutExecutionMixin {
   InnerWorkoutExecution innerWorkoutExecution;
+
+  static Serializer<WorkoutExecution> get serializer => WorkoutExecutionSerializer();
 
   WorkoutExecution(this.innerWorkoutExecution);
 }
@@ -88,9 +134,7 @@ abstract class _WorkoutExecutionMixin {
     return innerWorkoutExecution.executionItems.map((i) => WorkoutExecutionItem(i)).toList();
   }
 
-
 }
-
 
 abstract class InnerWorkoutExecution
     implements Built<InnerWorkoutExecution, InnerWorkoutExecutionBuilder> {
@@ -107,7 +151,55 @@ abstract class InnerWorkoutExecution
   factory InnerWorkoutExecution([void updates(InnerWorkoutExecutionBuilder b)]) = _$InnerWorkoutExecution;
 }
 
+
+class WorkoutExecutionItemSerializer implements StructuredSerializer<WorkoutExecutionItem> {
+  @override
+  final Iterable<Type> types = const [
+    WorkoutExecutionItem,
+    ExecutionItem
+  ];
+
+  @override
+  String wireName = 'WorkoutExecutionItem';
+
+  @override
+  WorkoutExecutionItem deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    InnerWorkoutExecutionItem innerWorkoutExecutionItem;
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'innerWorkoutExecutionItem':
+          innerWorkoutExecutionItem = serializers.deserialize(value,
+              specifiedType: const FullType(
+                  InnerWorkoutExecutionItem)) as InnerWorkoutExecutionItem;
+          break;
+      }
+    }
+
+    return WorkoutExecutionItem(innerWorkoutExecutionItem);
+  }
+
+  @override
+  Iterable serialize(Serializers serializers, WorkoutExecutionItem object, {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'innerWorkoutExecutionItem',
+      serializers.serialize(object.innerWorkoutExecutionItem,
+          specifiedType: const FullType(InnerWorkoutExecutionItem))
+    ];
+    return result;
+  }
+}
+
+
 class WorkoutExecutionItem extends ExecutionItem with _WorkoutExecutionItemMixin {
+
+  static Serializer<WorkoutExecutionItem> get serializer => WorkoutExecutionItemSerializer();
+
   InnerWorkoutExecutionItem innerWorkoutExecutionItem;
   WorkoutExecutionItem(this.innerWorkoutExecutionItem);
 }
@@ -215,12 +307,18 @@ abstract class _WorkoutExecutionItemMixin {
 
 }
 
-enum WorkoutExecutionItemType {
+class WorkoutExecutionItemType extends EnumClass{
 
-  WARMUP,
-  COOLDOWN,
-  REST,
-  WORK,
-  INTER_ACTIVITY_REST
+  static Serializer<WorkoutExecutionItemType> get serializer => _$workoutExecutionItemTypeSerializer;
 
+  static const WorkoutExecutionItemType WARMUP = _$WARMUP;
+  static const WorkoutExecutionItemType COOLDOWN = _$COOLDOWN;
+  static const WorkoutExecutionItemType REST = _$REST;
+  static const WorkoutExecutionItemType WORK = _$WORK;
+  static const WorkoutExecutionItemType INTER_ACTIVITY_REST = _$INTER_ACTIVITY_REST;
+
+  const WorkoutExecutionItemType._(String name) : super(name);
+
+  static BuiltSet<WorkoutExecutionItemType> get values => _$values;
+  static WorkoutExecutionItemType valueOf(String name) => _$valueOf(name);
 }

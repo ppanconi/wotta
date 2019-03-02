@@ -33,8 +33,9 @@ class _$WottaActions extends WottaActions {
   final ActionDispatcher<Executor> togglePauseCurrentExecutionItem =
       new ActionDispatcher<Executor>(
           'WottaActions-togglePauseCurrentExecutionItem');
-  final ActionDispatcher<Executor> completeCurrentExecutionItem =
-      new ActionDispatcher<Executor>(
+  final ActionDispatcher<CallbackPayload<Executor>>
+      completeCurrentExecutionItem =
+      new ActionDispatcher<CallbackPayload<Executor>>(
           'WottaActions-completeCurrentExecutionItem');
 
   @override
@@ -72,6 +73,7 @@ class WottaActionsNames {
       new ActionName<Workout>('WottaActions-startWorkoutExecution');
   static final ActionName<Executor> togglePauseCurrentExecutionItem =
       new ActionName<Executor>('WottaActions-togglePauseCurrentExecutionItem');
-  static final ActionName<Executor> completeCurrentExecutionItem =
-      new ActionName<Executor>('WottaActions-completeCurrentExecutionItem');
+  static final ActionName<CallbackPayload<Executor>>
+      completeCurrentExecutionItem = new ActionName<CallbackPayload<Executor>>(
+          'WottaActions-completeCurrentExecutionItem');
 }

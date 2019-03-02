@@ -19,7 +19,7 @@ class ExecutionView extends StatelessWidget {
         appBar: AppBar(
           title: Text('"${executor.execution.title}" workout'),
         ),
-        body: Container(
+        body: executor.currentExecutionItem == null ? Text('...') : Container(
 //          decoration: ,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

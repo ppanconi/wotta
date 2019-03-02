@@ -32,34 +32,11 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
   Iterable serialize(Serializers serializers, WottaAppState object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'status',
-      serializers.serialize(object.status, specifiedType: const FullType(int)),
-      'statusReport',
-      serializers.serialize(object.statusReport,
-          specifiedType: const FullType(String)),
       'workouts',
       serializers.serialize(object.workouts,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Workout)])),
     ];
-    if (object.creatingWorkout != null) {
-      result
-        ..add('creatingWorkout')
-        ..add(serializers.serialize(object.creatingWorkout,
-            specifiedType: const FullType(Workout)));
-    }
-    if (object.currentEditingStatus != null) {
-      result
-        ..add('currentEditingStatus')
-        ..add(serializers.serialize(object.currentEditingStatus,
-            specifiedType: const FullType(EntityEditingStatus)));
-    }
-    if (object.executor != null) {
-      result
-        ..add('executor')
-        ..add(serializers.serialize(object.executor,
-            specifiedType: const FullType(Executor)));
-    }
 
     return result;
   }
@@ -75,31 +52,10 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'status':
-          result.status = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
-        case 'statusReport':
-          result.statusReport = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'workouts':
           result.workouts.replace(serializers.deserialize(value,
               specifiedType: const FullType(
                   BuiltList, const [const FullType(Workout)])) as BuiltList);
-          break;
-        case 'creatingWorkout':
-          result.creatingWorkout.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Workout)) as Workout);
-          break;
-        case 'currentEditingStatus':
-          result.currentEditingStatus.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(EntityEditingStatus))
-              as EntityEditingStatus);
-          break;
-        case 'executor':
-          result.executor.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Executor)) as Executor);
           break;
       }
     }
@@ -133,12 +89,6 @@ class _$WottaAppState extends WottaAppState {
       this.currentEditingStatus,
       this.executor})
       : super._() {
-    if (status == null) {
-      throw new BuiltValueNullFieldError('WottaAppState', 'status');
-    }
-    if (statusReport == null) {
-      throw new BuiltValueNullFieldError('WottaAppState', 'statusReport');
-    }
     if (workouts == null) {
       throw new BuiltValueNullFieldError('WottaAppState', 'workouts');
     }

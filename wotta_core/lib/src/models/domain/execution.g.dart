@@ -19,11 +19,50 @@ part of execution;
 // ignore_for_file: unnecessary_new
 // ignore_for_file: test_types_in_equals
 
+const WorkoutExecutionItemType _$WARMUP =
+    const WorkoutExecutionItemType._('WARMUP');
+const WorkoutExecutionItemType _$COOLDOWN =
+    const WorkoutExecutionItemType._('COOLDOWN');
+const WorkoutExecutionItemType _$REST =
+    const WorkoutExecutionItemType._('REST');
+const WorkoutExecutionItemType _$WORK =
+    const WorkoutExecutionItemType._('WORK');
+const WorkoutExecutionItemType _$INTER_ACTIVITY_REST =
+    const WorkoutExecutionItemType._('INTER_ACTIVITY_REST');
+
+WorkoutExecutionItemType _$valueOf(String name) {
+  switch (name) {
+    case 'WARMUP':
+      return _$WARMUP;
+    case 'COOLDOWN':
+      return _$COOLDOWN;
+    case 'REST':
+      return _$REST;
+    case 'WORK':
+      return _$WORK;
+    case 'INTER_ACTIVITY_REST':
+      return _$INTER_ACTIVITY_REST;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<WorkoutExecutionItemType> _$values =
+    new BuiltSet<WorkoutExecutionItemType>(const <WorkoutExecutionItemType>[
+  _$WARMUP,
+  _$COOLDOWN,
+  _$REST,
+  _$WORK,
+  _$INTER_ACTIVITY_REST,
+]);
+
 Serializer<Executor> _$executorSerializer = new _$ExecutorSerializer();
 Serializer<InnerWorkoutExecution> _$innerWorkoutExecutionSerializer =
     new _$InnerWorkoutExecutionSerializer();
 Serializer<InnerWorkoutExecutionItem> _$innerWorkoutExecutionItemSerializer =
     new _$InnerWorkoutExecutionItemSerializer();
+Serializer<WorkoutExecutionItemType> _$workoutExecutionItemTypeSerializer =
+    new _$WorkoutExecutionItemTypeSerializer();
 
 class _$ExecutorSerializer implements StructuredSerializer<Executor> {
   @override
@@ -230,6 +269,25 @@ class _$InnerWorkoutExecutionItemSerializer
 
     return result.build();
   }
+}
+
+class _$WorkoutExecutionItemTypeSerializer
+    implements PrimitiveSerializer<WorkoutExecutionItemType> {
+  @override
+  final Iterable<Type> types = const <Type>[WorkoutExecutionItemType];
+  @override
+  final String wireName = 'WorkoutExecutionItemType';
+
+  @override
+  Object serialize(Serializers serializers, WorkoutExecutionItemType object,
+          {FullType specifiedType = FullType.unspecified}) =>
+      object.name;
+
+  @override
+  WorkoutExecutionItemType deserialize(
+          Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      WorkoutExecutionItemType.valueOf(serialized as String);
 }
 
 class _$Executor extends Executor {

@@ -2,22 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:wotta_core/wotta_core.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-import 'package:wotta_flutter/connectors/workouts_connector.dart';
-import 'package:wotta_flutter/presentation/workout.dart';
 import 'package:wotta_flutter/routes.dart';
+import 'middlewares.dart';
 
 
+void main() async {
+  var state = await fileStorage.readState();
+  runApp( WottaApp(state));
+}
 
-void main() => runApp(WottaApp());
 
 class WottaApp extends StatefulWidget {
-  final Store<WottaAppState, WottaAppStateBuilder, WottaActions> store =
-      Store(wottaReducerBuilder.build(), WottaAppState(), WottaActions());
+
+  final Store<WottaAppState, WottaAppStateBuilder, WottaActions> store;
 
   @override
   State<StatefulWidget> createState() {
     return AppState();
   }
+
+  WottaApp(WottaAppState state):
+    store = Store(
+        wottaReducerBuilder.build(), state, WottaActions(),
+        middleware: [middlewareBuilder.build(), savingOnFileMiddleware]);
 }
 
 class AppState extends State<WottaApp> {
@@ -35,16 +42,8 @@ class AppState extends State<WottaApp> {
       store: store,
       child: MaterialApp(
         title: 'Wotta',
-//        home: WorkoutView(),
-
-//        theme: ArchSampleTheme.theme,
-//        localizationsDelegates: [
-//          ArchSampleLocalizationsDelegate(),
-//          BuiltReduxLocalizationsDelegate(),
-//        ],
         routes: WottaRoutes.routes,
       ),
     );
   }
 }
-

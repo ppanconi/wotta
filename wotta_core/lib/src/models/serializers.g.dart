@@ -24,14 +24,32 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ActivityDefinitionSequenceItem.serializer)
       ..add(ActivityUniformDefinition.serializer)
       ..add(ActivityWork.serializer)
+      ..add(Executor.serializer)
+      ..add(InnerWorkoutExecution.serializer)
+      ..add(InnerWorkoutExecutionItem.serializer)
       ..add(UniformWorkoutDefinition.serializer)
       ..add(Workout.serializer)
       ..add(WorkoutDefinition.serializer)
+      ..add(WorkoutExecutionItemType.serializer)
+      ..add(WottaAppState.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList,
               const [const FullType(ActivityDefinitionSequenceItem)]),
           () => new ListBuilder<ActivityDefinitionSequenceItem>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ActivityWork)]),
-          () => new ListBuilder<ActivityWork>()))
+          () => new ListBuilder<ActivityWork>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InnerWorkoutExecutionItem)]),
+          () => new ListBuilder<InnerWorkoutExecutionItem>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Workout)]),
+          () => new ListBuilder<Workout>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(int)]),
+          () => new ListBuilder<int>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(int)]),
+          () => new ListBuilder<int>()))
     .build();

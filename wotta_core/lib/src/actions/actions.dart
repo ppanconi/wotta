@@ -23,9 +23,18 @@ abstract class WottaActions extends ReduxActions {
 
   ActionDispatcher<Executor> togglePauseCurrentExecutionItem;
 
-  ActionDispatcher<Executor> completeCurrentExecutionItem;
+  ActionDispatcher<CallbackPayload<Executor>> completeCurrentExecutionItem;
 
   WottaActions._();
 
   factory WottaActions() => _$WottaActions();
+}
+
+class CallbackPayload<Payload> {
+  final Payload payload;
+  final Function(WottaAppState) callback;
+
+  CallbackPayload(this.payload, this.callback);
+
+
 }

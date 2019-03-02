@@ -12,19 +12,26 @@ part 'wotta_app_state.g.dart';
 abstract class WottaAppState implements Built<WottaAppState, WottaAppStateBuilder> {
   static Serializer<WottaAppState> get serializer => _$wottaAppStateSerializer;
 
+  @BuiltValueField(serialize: false)
+  @nullable
   int get status;
 
+  @BuiltValueField(serialize: false)
+  @nullable
   String get statusReport;
 
   BuiltList<Workout> get workouts;
 
   @nullable
+  @BuiltValueField(serialize: false)
   Workout get creatingWorkout;
 
   @nullable
+  @BuiltValueField(serialize: false)
   EntityEditingStatus  get currentEditingStatus;
 
   @nullable
+  @BuiltValueField(serialize: false)
   Executor get executor;
 
   WottaAppState._();
