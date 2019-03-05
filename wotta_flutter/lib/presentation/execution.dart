@@ -4,73 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wotta_core/wotta_core.dart';
 
-class CountdownWidget extends StatefulWidget {
-  final Executor executor;
-
-  CountdownWidget(this.executor);
-
-  @override
-  CountdownState createState() => CountdownState();
-}
-
-class CountdownState extends State<CountdownWidget>
-    with TickerProviderStateMixin {
-  AnimationController controller;
-  int itemIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = makeAnimationController();
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
-
-  AnimationController makeAnimationController() {
-    itemIndex = widget.executor.currentExecutionItemIndex;
-    return AnimationController(
-      vsync: this,
-      duration: Duration(seconds: this.widget.executor.currentExecutionItem.manualStop ? 0 : this.widget.executor.currentExecutionItem.durationSecs),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    if (itemIndex != widget.executor.currentExecutionItemIndex) {
-      this.controller = makeAnimationController();
-    }
-
-    if (controller.isAnimating && widget.executor.isPaused)
-      controller.stop();
-    else if (!controller.isAnimating && !widget.executor.isPaused &&
-      !widget.executor.currentExecutionItem.manualStop) {
-      controller.reverse(
-          from: controller.value == 0.0
-              ? 1.0
-              : controller.value);
-    }
-
-    ThemeData themeData = Theme.of(context);
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (BuildContext context, Widget child) {
-        return new CustomPaint(
-            painter: TimerPainter(
-                animation: controller,
-                backgroundColor: themeData.disabledColor,
-                color: themeData.indicatorColor,
-                enabled: ! this.widget.executor.currentExecutionItem.manualStop
-        ));
-      },
-    );
-  }
-}
 
 class TimerPainter extends CustomPainter {
   TimerPainter({
@@ -110,16 +43,71 @@ class TimerPainter extends CustomPainter {
   }
 }
 
-class ExecutionView extends StatelessWidget {
+class ExecutionView extends StatefulWidget {
   final Executor executor;
   final Function(Executor) togglePauseCurrentItem;
   final Function(Executor) completeCurrentItem;
 
-  ExecutionView(
-      this.executor, this.togglePauseCurrentItem, this.completeCurrentItem);
+  ExecutionView(this.executor, this.togglePauseCurrentItem,
+      this.completeCurrentItem);
+
+  @override
+  State<StatefulWidget> createState() => ExecutionViewState();
+
+}
+
+class ExecutionViewState extends State<ExecutionView>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+  int itemIndex;
+
+  Executor get executor => widget.executor;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = makeAnimationController();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  AnimationController makeAnimationController() {
+    itemIndex = executor.currentExecutionItemIndex;
+    var animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: executor.currentExecutionItem.manualStop ? 0
+          : executor.currentExecutionItem.durationSecs),
+      value: 1.0,
+
+    );
+    animationController.addStatusListener((status) {
+      if(status == AnimationStatus.dismissed) {
+        this.widget.completeCurrentItem(executor);
+      }
+    });
+    return animationController;
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    if (itemIndex != executor.currentExecutionItemIndex) {
+      this.controller = makeAnimationController();
+    }
+
+    if (controller.isAnimating && executor.isPaused)
+      controller.stop();
+    else if (!controller.isAnimating && !executor.isPaused &&
+        !executor.currentExecutionItem.manualStop) {
+      controller.reverse(
+          from: controller.value);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('"${executor.execution.title}" workout'),
@@ -170,19 +158,22 @@ class ExecutionView extends StatelessWidget {
   }
 
   Widget provideItemController(BuildContext context) {
+
+    ThemeData themeData = Theme.of(context);
+
     var size = 100.0;
     var buttons = [
       IconButton(
         icon: new Icon(Icons.check, color: Colors.green),
         iconSize: size,
-        onPressed: () => completeCurrentItem(executor),
+        onPressed: () => this.widget.completeCurrentItem(executor),
       )
     ];
     if (executor.isPaused) {
       buttons.add(IconButton(
         icon: new Icon(Icons.play_arrow, color: Theme.of(context).accentColor),
         iconSize: size,
-        onPressed: () => togglePauseCurrentItem(executor),
+        onPressed: () => this.widget.togglePauseCurrentItem(executor),
       ));
     } else {
       buttons.add(IconButton(
@@ -191,7 +182,7 @@ class ExecutionView extends StatelessWidget {
           color: Theme.of(context).primaryColor,
         ),
         iconSize: size,
-        onPressed: () => togglePauseCurrentItem(executor),
+        onPressed: () => this.widget.togglePauseCurrentItem(executor),
       ));
     }
 
@@ -204,14 +195,58 @@ class ExecutionView extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: AspectRatio(
                 aspectRatio: 1.0,
-                child: Stack(children: <Widget>[
-                  Positioned.fill(
-                    child: CountdownWidget(executor),
-                  ),
-                  Center(child: buttonsRow)
+                child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: AnimatedBuilder(
+                          animation: controller,
+                          builder: (BuildContext context, Widget child) {
+                            return new CustomPaint(
+                                painter: TimerPainter(
+                                    animation: controller,
+                                    backgroundColor: themeData.disabledColor,
+                                    color: themeData.indicatorColor,
+                                    enabled: ! this.widget.executor.currentExecutionItem.manualStop
+                                ));
+                          },
+                        )
+                      ),
+                      Align(
+                        alignment: FractionalOffset.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            AnimatedBuilder(
+                                animation: controller,
+                                builder: (BuildContext context, Widget child) {
+                                  return new Container(
+                                    padding: EdgeInsets.only(top: 35.0),
+                                    child: Text(
+                                    timerString,
+                                    style: themeData.textTheme.display3,
+                                  ));
+                                }),
+                          ],
+                        ),
+                      ),
+                      Center(child: buttonsRow)
                 ]))));
 
     return widget;
+  }
+
+  String get timerString {
+
+    if (executor.currentExecutionItem.manualStop) {
+      return '- - : - -';
+    } else {
+      Duration duration = controller.duration * controller.value;
+      return '${(duration.inMinutes).toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+
+    }
+
+
   }
 }
 
