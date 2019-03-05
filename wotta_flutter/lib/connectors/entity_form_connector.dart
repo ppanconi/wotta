@@ -19,7 +19,7 @@ class EntityFormConnector
       appBar: AppBar(
         title: Text(
           entity.isSaved()
-              ? "Editing Workout"
+              ? "Editing " + entity.typeName()
               : "Create new " + entity.typeName(),
         ),
       ),

@@ -81,11 +81,11 @@ class _$ExecutorSerializer implements StructuredSerializer<Executor> {
       serializers.serialize(object.isPaused,
           specifiedType: const FullType(bool)),
     ];
-    if (object.currentExecutionItem != null) {
+    if (object.currentExecutionItemIndex != null) {
       result
-        ..add('currentExecutionItem')
-        ..add(serializers.serialize(object.currentExecutionItem,
-            specifiedType: const FullType(ExecutionItem)));
+        ..add('currentExecutionItemIndex')
+        ..add(serializers.serialize(object.currentExecutionItemIndex,
+            specifiedType: const FullType(int)));
     }
 
     return result;
@@ -106,9 +106,9 @@ class _$ExecutorSerializer implements StructuredSerializer<Executor> {
           result.execution = serializers.deserialize(value,
               specifiedType: const FullType(Execution)) as Execution;
           break;
-        case 'currentExecutionItem':
-          result.currentExecutionItem = serializers.deserialize(value,
-              specifiedType: const FullType(ExecutionItem)) as ExecutionItem;
+        case 'currentExecutionItemIndex':
+          result.currentExecutionItemIndex = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'isPaused':
           result.isPaused = serializers.deserialize(value,
@@ -294,14 +294,14 @@ class _$Executor extends Executor {
   @override
   final Execution execution;
   @override
-  final ExecutionItem currentExecutionItem;
+  final int currentExecutionItemIndex;
   @override
   final bool isPaused;
 
   factory _$Executor([void updates(ExecutorBuilder b)]) =>
       (new ExecutorBuilder()..update(updates)).build();
 
-  _$Executor._({this.execution, this.currentExecutionItem, this.isPaused})
+  _$Executor._({this.execution, this.currentExecutionItemIndex, this.isPaused})
       : super._() {
     if (execution == null) {
       throw new BuiltValueNullFieldError('Executor', 'execution');
@@ -323,14 +323,14 @@ class _$Executor extends Executor {
     if (identical(other, this)) return true;
     return other is Executor &&
         execution == other.execution &&
-        currentExecutionItem == other.currentExecutionItem &&
+        currentExecutionItemIndex == other.currentExecutionItemIndex &&
         isPaused == other.isPaused;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, execution.hashCode), currentExecutionItem.hashCode),
+        $jc($jc(0, execution.hashCode), currentExecutionItemIndex.hashCode),
         isPaused.hashCode));
   }
 
@@ -338,7 +338,7 @@ class _$Executor extends Executor {
   String toString() {
     return (newBuiltValueToStringHelper('Executor')
           ..add('execution', execution)
-          ..add('currentExecutionItem', currentExecutionItem)
+          ..add('currentExecutionItemIndex', currentExecutionItemIndex)
           ..add('isPaused', isPaused))
         .toString();
   }
@@ -351,10 +351,10 @@ class ExecutorBuilder implements Builder<Executor, ExecutorBuilder> {
   Execution get execution => _$this._execution;
   set execution(Execution execution) => _$this._execution = execution;
 
-  ExecutionItem _currentExecutionItem;
-  ExecutionItem get currentExecutionItem => _$this._currentExecutionItem;
-  set currentExecutionItem(ExecutionItem currentExecutionItem) =>
-      _$this._currentExecutionItem = currentExecutionItem;
+  int _currentExecutionItemIndex;
+  int get currentExecutionItemIndex => _$this._currentExecutionItemIndex;
+  set currentExecutionItemIndex(int currentExecutionItemIndex) =>
+      _$this._currentExecutionItemIndex = currentExecutionItemIndex;
 
   bool _isPaused;
   bool get isPaused => _$this._isPaused;
@@ -365,7 +365,7 @@ class ExecutorBuilder implements Builder<Executor, ExecutorBuilder> {
   ExecutorBuilder get _$this {
     if (_$v != null) {
       _execution = _$v.execution;
-      _currentExecutionItem = _$v.currentExecutionItem;
+      _currentExecutionItemIndex = _$v.currentExecutionItemIndex;
       _isPaused = _$v.isPaused;
       _$v = null;
     }
@@ -390,7 +390,7 @@ class ExecutorBuilder implements Builder<Executor, ExecutorBuilder> {
     final _$result = _$v ??
         new _$Executor._(
             execution: execution,
-            currentExecutionItem: currentExecutionItem,
+            currentExecutionItemIndex: currentExecutionItemIndex,
             isPaused: isPaused);
     replace(_$result);
     return _$result;

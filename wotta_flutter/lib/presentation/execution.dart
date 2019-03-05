@@ -1,107 +1,217 @@
-
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wotta_core/wotta_core.dart';
 
-class ExecutionView extends StatelessWidget {
+class CountdownWidget extends StatefulWidget {
+  final Executor executor;
 
+  CountdownWidget(this.executor);
+
+  @override
+  CountdownState createState() => CountdownState();
+}
+
+class CountdownState extends State<CountdownWidget>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+  int itemIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = makeAnimationController();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  AnimationController makeAnimationController() {
+    itemIndex = widget.executor.currentExecutionItemIndex;
+    return AnimationController(
+      vsync: this,
+      duration: Duration(seconds: this.widget.executor.currentExecutionItem.manualStop ? 0 : this.widget.executor.currentExecutionItem.durationSecs),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    if (itemIndex != widget.executor.currentExecutionItemIndex) {
+      this.controller = makeAnimationController();
+    }
+
+    if (controller.isAnimating && widget.executor.isPaused)
+      controller.stop();
+    else if (!controller.isAnimating && !widget.executor.isPaused &&
+      !widget.executor.currentExecutionItem.manualStop) {
+      controller.reverse(
+          from: controller.value == 0.0
+              ? 1.0
+              : controller.value);
+    }
+
+    ThemeData themeData = Theme.of(context);
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (BuildContext context, Widget child) {
+        return new CustomPaint(
+            painter: TimerPainter(
+                animation: controller,
+                backgroundColor: themeData.disabledColor,
+                color: themeData.indicatorColor,
+                enabled: ! this.widget.executor.currentExecutionItem.manualStop
+        ));
+      },
+    );
+  }
+}
+
+class TimerPainter extends CustomPainter {
+  TimerPainter({
+    this.animation,
+    this.backgroundColor,
+    this.color,
+    this.enabled
+  }) : super(repaint: animation);
+
+  final Animation<double> animation;
+  final Color backgroundColor, color;
+  final bool enabled;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = backgroundColor
+      ..strokeWidth = 5.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
+    paint.color = color;
+    if (enabled) {
+      double progress = (1.0 - animation.value) * 2 * math.pi;
+      canvas.drawArc(Offset.zero & size, math.pi * 1.5, -progress, false, paint);
+    }
+
+  }
+
+  @override
+  bool shouldRepaint(TimerPainter old) {
+    return animation.value != old.animation.value ||
+        color != old.color ||
+        backgroundColor != old.backgroundColor ||
+        enabled != old.enabled;
+  }
+}
+
+class ExecutionView extends StatelessWidget {
   final Executor executor;
   final Function(Executor) togglePauseCurrentItem;
   final Function(Executor) completeCurrentItem;
 
-  ExecutionView(this.executor, this.togglePauseCurrentItem, this.completeCurrentItem);
+  ExecutionView(
+      this.executor, this.togglePauseCurrentItem, this.completeCurrentItem);
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-        appBar: AppBar(
-          title: Text('"${executor.execution.title}" workout'),
-        ),
-        body: executor.currentExecutionItem == null ? Text('...') : Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('"${executor.execution.title}" workout'),
+      ),
+      body: executor.currentExecutionItem == null
+          ? Text('...')
+          : Container(
 //          decoration: ,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.start,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                     Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
+                        margin: EdgeInsets.only(
+                            left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
                         child: Text(executor.currentExecutionItem.title,
-                          textScaleFactor: 2.0)
-                    )
+                            textScaleFactor: 2.0))
                   ]),
-              Row(mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                     Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
+                        margin: EdgeInsets.only(
+                            left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
                         child: Text(
-                          executor.currentExecutionItem.subTitle,
+                          executor.currentExecutionItem.subTitle + ' (manual: ${executor.currentExecutionItem.manualStop})',
                           textScaleFactor: 1.5,
                           style: TextStyle(color: Colors.black45),
-                        )
-                    )
+                        ))
                   ]),
-              Row(mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                     Container(
-                        margin: EdgeInsets.only(left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
+                        margin: EdgeInsets.only(
+                            left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
                         child: Text(
                           executor.currentExecutionItem.notes,
                           textScaleFactor: 1.0,
-                          style: TextStyle(color: Colors.black45, fontStyle: FontStyle.italic),
-                        )
-                    )
+                          style: TextStyle(
+                              color: Colors.black45,
+                              fontStyle: FontStyle.italic),
+                        ))
                   ]),
-
-              Expanded(
-                child:Center(
-                  child: provideItemController(context)
-                )
-              )
-            ]
-          )),
-      );
+                  Expanded(
+//                child:Center(
+                      child: provideItemController(context)
+//                )
+                      )
+                ])),
+    );
   }
 
   Widget provideItemController(BuildContext context) {
-
     var size = 100.0;
-//    if (executor.currentExecutionItem.manualStop) {
-    if (true) {
-      var buttons = [
-        IconButton(icon: new Icon(Icons.check, color: Colors.green),
-          iconSize: size,
-          onPressed: () => completeCurrentItem(executor),
-        )
-      ];
-      if (executor.isPaused) {
-        buttons.add(
-            IconButton(
-              icon: new Icon(Icons.play_arrow, color: Theme.of(context).accentColor),
-              iconSize: size,
-              onPressed: () => togglePauseCurrentItem(executor),
-            )
-        );
-      } else {
-        buttons.add(
-            IconButton(
-              icon: new Icon(Icons.pause, color: Theme.of(context).primaryColor,),
-              iconSize: size ,
-              onPressed: () => togglePauseCurrentItem(executor),
-            )
-        );
-      }
-
-      return Row(mainAxisAlignment: MainAxisAlignment.center,
-          children: buttons);
-
-
+    var buttons = [
+      IconButton(
+        icon: new Icon(Icons.check, color: Colors.green),
+        iconSize: size,
+        onPressed: () => completeCurrentItem(executor),
+      )
+    ];
+    if (executor.isPaused) {
+      buttons.add(IconButton(
+        icon: new Icon(Icons.play_arrow, color: Theme.of(context).accentColor),
+        iconSize: size,
+        onPressed: () => togglePauseCurrentItem(executor),
+      ));
     } else {
-      return Text('Timer');
+      buttons.add(IconButton(
+        icon: new Icon(
+          Icons.pause,
+          color: Theme.of(context).primaryColor,
+        ),
+        iconSize: size,
+        onPressed: () => togglePauseCurrentItem(executor),
+      ));
     }
 
+    var buttonsRow =
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: buttons);
+
+    var widget = Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: Align(
+            alignment: FractionalOffset.center,
+            child: AspectRatio(
+                aspectRatio: 1.0,
+                child: Stack(children: <Widget>[
+                  Positioned.fill(
+                    child: CountdownWidget(executor),
+                  ),
+                  Center(child: buttonsRow)
+                ]))));
+
+    return widget;
   }
 }
 
@@ -116,9 +226,10 @@ class _CButton extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.android),
         color: Colors.white,
-        onPressed: () { print("filled background"); },
+        onPressed: () {
+          print("filled background");
+        },
       ),
     );
   }
-
 }

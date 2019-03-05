@@ -18,96 +18,66 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
 
 ;
 
-Map _togglePauseExecutionItem(Executor executor, [bool toComplete = false]) {
+InnerWorkoutExecution _togglePauseExecutionItem(Executor executor, [bool toComplete = false]) {
 
-  bool found = false;
-  int i = 0;
-  InnerWorkoutExecution innerExecution = (executor.execution as WorkoutExecution).innerWorkoutExecution.rebuild( (b) => b
-      .executionItems.map( (InnerWorkoutExecutionItem item)  {
-    if (item == (executor.currentExecutionItem as WorkoutExecutionItem).innerWorkoutExecutionItem) {
-      found = true;
-      if (executor.isPaused) {
-        if (! toComplete) {
-          return item.rebuild((b) =>
-              b.startWorkTimestampsSec.add(DateTime
-                  .now()
-                  .millisecondsSinceEpoch));
-        } else {
-          return item;
-        }
-      } else {
-        return item.rebuild((b) => b.stopWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
-      }
-    } else {
-      (!found) ? i++ : i;
-      return item;
+  InnerWorkoutExecutionItem innerExecutionItem = (executor.execution as WorkoutExecution).innerWorkoutExecution.executionItems[executor.currentExecutionItemIndex];
+
+  if (executor.isPaused) {
+    if (! toComplete) {
+      innerExecutionItem = innerExecutionItem.rebuild((b) =>
+          b.startWorkTimestampsSec.add(DateTime
+              .now()
+              .millisecondsSinceEpoch));
     }
-  })
+  } else {
+    innerExecutionItem = innerExecutionItem.rebuild((b) => b.stopWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
+  }
+
+  InnerWorkoutExecution innerExecution = (executor.execution as WorkoutExecution).innerWorkoutExecution.rebuild( (b) => b
+      .executionItems.setRange(executor.currentExecutionItemIndex, executor.currentExecutionItemIndex, [innerExecutionItem])
   );
 
-  return {
-    'innerExecution': innerExecution,
-    'itemIndex': i
-  };
+  return innerExecution;
 }
 
 void completeCurrentExecutionItem(WottaAppState state, Action<CallbackPayload<Executor>> action, WottaAppStateBuilder builder) {
   var executor = action.payload.payload;
 
-  var map = _togglePauseExecutionItem(executor, true);
-  int i = map['itemIndex'];
-  InnerWorkoutExecution innerExecution = map['innerExecution'];
+  InnerWorkoutExecution innerExecution = _togglePauseExecutionItem(executor, true);
+  int i = executor.currentExecutionItemIndex;
 
   WorkoutExecutionItem nextItem =
     (i < innerExecution.executionItems.length - 1) ?
       WorkoutExecutionItem(innerExecution.executionItems[i + 1]): null;
 
+  int nextItemIndex = null;
   if (nextItem != null) {
+    nextItemIndex = i + 1;
     nextItem = WorkoutExecutionItem(nextItem.innerWorkoutExecutionItem.rebuild((b) =>
         b.startWorkTimestampsSec = ListBuilder<int>([DateTime.now().millisecondsSinceEpoch])
     ));
 
     innerExecution = innerExecution.rebuild((b) =>
-        b.executionItems.setAll(i + 1, [nextItem.innerWorkoutExecutionItem]));
+        b.executionItems.setAll(nextItemIndex, [nextItem.innerWorkoutExecutionItem]));
   }
 
 
   builder.executor = executor.toBuilder()
     ..isPaused = nextItem == null ? true : false
     ..execution = WorkoutExecution(innerExecution)
-    ..currentExecutionItem = nextItem;
+    ..currentExecutionItemIndex = nextItemIndex;
 
 }
 
 void togglePauseCurrentExecutionItem(WottaAppState state, Action<Executor> action, WottaAppStateBuilder builder) {
   var executor = action.payload;
-  
-//  bool found = false;
-//  int i = 0;
-//  InnerWorkoutExecution innerExecution = (executor.execution as WorkoutExecution).innerWorkoutExecution.rebuild( (b) => b
-//      .executionItems.map( (InnerWorkoutExecutionItem item)  {
-//          if (item == (executor.currentExecutionItem as WorkoutExecutionItem).innerWorkoutExecutionItem) {
-//            found = true;
-//            if (executor.isPaused) {
-//               return item.rebuild((b) => b.startWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
-//            } else {
-//              return item.rebuild((b) => b.stopWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
-//            }
-//          } else {
-//            (!found) ? i++ : i;
-//            return item;
-//          }
-//      })
-//     );
 
-  var map = _togglePauseExecutionItem(executor);
-  int i = map['itemIndex'];
-  InnerWorkoutExecution innerExecution = map['innerExecution'];
+  InnerWorkoutExecution innerExecution = _togglePauseExecutionItem(executor);
+  int i = executor.currentExecutionItemIndex;
 
   builder.executor = executor.toBuilder()
     ..isPaused = ! executor.isPaused
-    ..execution = WorkoutExecution(innerExecution)
-    ..currentExecutionItem = WorkoutExecutionItem(innerExecution.executionItems[i]);
+    ..execution = WorkoutExecution(innerExecution);
 }
 
 void startWorkoutExecution(WottaAppState state, Action<Workout> action, WottaAppStateBuilder builder) {
@@ -171,7 +141,7 @@ void startWorkoutExecution(WottaAppState state, Action<Workout> action, WottaApp
         ..definition = workoutDefinition.toBuilder()
         ..executionItems = executionItemsBuilder
       ))
-      ..currentExecutionItem = WorkoutExecutionItem(executionItems[0])
+      ..currentExecutionItemIndex = 0
       ..isPaused = true
     ).toBuilder();
   }
