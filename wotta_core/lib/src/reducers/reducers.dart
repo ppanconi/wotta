@@ -16,6 +16,8 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.togglePauseCurrentExecutionItem, togglePauseCurrentExecutionItem)
   ..add(WottaActionsNames.completeCurrentExecutionItem, completeCurrentExecutionItem)
   ..add(WottaActionsNames.saveWorkoutExecution, saveExecution)
+  ..add(WottaActionsNames.deleteExecutionAction, deleteExecution)
+  ..add(WottaActionsNames.restoreExecutionAction, restoreExecution)
 
 ;
 
@@ -246,4 +248,16 @@ void updateEntityEditingStatus(WottaAppState state, Action<EntityEditingStatus> 
 
 void saveExecution(WottaAppState state, Action<WorkoutExecution> action, WottaAppStateBuilder builder) {
   builder.executions.add(action.payload);
+}
+
+void restoreExecution(WottaAppState state, Action<WorkoutExecution> action, WottaAppStateBuilder builder) {
+
+  final restoredExecution = action.payload;
+  if (!state.executions.contains(restoredExecution)) {
+    builder.executions.add(restoredExecution);
+  }
+}
+
+void deleteExecution(WottaAppState state, Action<WorkoutExecution> action, WottaAppStateBuilder builder) {
+  builder.executions.where((ex) => ex != action.payload);
 }

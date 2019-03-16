@@ -62,7 +62,11 @@ class WottaHomePage extends StatelessWidget {
                 WorkoutsView(),
                 StoreConnection<WottaAppState, WottaActions, BuiltList<WorkoutExecution>>(
                   connect: (state) => state.executions,
-                  builder: (ctx, executions, actions) => ExecutionList(executions: executions),
+                  builder: (ctx, executions, actions) =>
+                      ExecutionList(executions: executions,
+                        onRemove: actions.deleteExecutionAction,
+                        onUndoRemove: actions.restoreExecutionAction,
+                      ),
                 ) ,
               ],
             ),
