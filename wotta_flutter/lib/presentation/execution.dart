@@ -72,8 +72,8 @@ class ExecutionViewState extends State<ExecutionView>
 
   @override
   void dispose() {
-    super.dispose();
     controller.dispose();
+    super.dispose();
   }
 
   AnimationController makeAnimationController() {
@@ -86,6 +86,7 @@ class ExecutionViewState extends State<ExecutionView>
 
     );
     animationController.addStatusListener((status) {
+      // dismissed because we use a reverse
       if(status == AnimationStatus.dismissed) {
         this.widget.completeCurrentItem(executor);
       }
@@ -98,7 +99,8 @@ class ExecutionViewState extends State<ExecutionView>
 
     if (executor.currentExecutionItem != null) {
       if (itemIndex != executor.currentExecutionItemIndex) {
-        this.controller = makeAnimationController();
+        controller.dispose();
+        controller = makeAnimationController();
       }
 
       if (controller.isAnimating && executor.isPaused)

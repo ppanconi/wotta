@@ -136,7 +136,7 @@ void startWorkoutExecution(WottaAppState state, Action<Workout> action, WottaApp
     }
   });
 
-  if ( ! workoutDefinition.warmup.isWithoutWorkDuration) {
+  if ( ! workoutDefinition.cooldown.isWithoutWorkDuration) {
     executionItemsBuilder.add(InnerWorkoutExecutionItem((b) => b
       ..type = WorkoutExecutionItemType.COOLDOWN
       ..activityWork = workoutDefinition.cooldown.toBuilder()
