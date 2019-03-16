@@ -37,6 +37,9 @@ class _$WottaActions extends WottaActions {
       completeCurrentExecutionItem =
       new ActionDispatcher<CallbackPayload<Executor>>(
           'WottaActions-completeCurrentExecutionItem');
+  final ActionDispatcher<WorkoutExecution> saveWorkoutExecution =
+      new ActionDispatcher<WorkoutExecution>(
+          'WottaActions-saveWorkoutExecution');
 
   @override
   void setDispatcher(Dispatcher dispatcher) {
@@ -50,6 +53,7 @@ class _$WottaActions extends WottaActions {
     startWorkoutExecution.setDispatcher(dispatcher);
     togglePauseCurrentExecutionItem.setDispatcher(dispatcher);
     completeCurrentExecutionItem.setDispatcher(dispatcher);
+    saveWorkoutExecution.setDispatcher(dispatcher);
   }
 }
 
@@ -76,4 +80,6 @@ class WottaActionsNames {
   static final ActionName<CallbackPayload<Executor>>
       completeCurrentExecutionItem = new ActionName<CallbackPayload<Executor>>(
           'WottaActions-completeCurrentExecutionItem');
+  static final ActionName<WorkoutExecution> saveWorkoutExecution =
+      new ActionName<WorkoutExecution>('WottaActions-saveWorkoutExecution');
 }

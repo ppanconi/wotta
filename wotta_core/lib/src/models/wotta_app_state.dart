@@ -22,6 +22,8 @@ abstract class WottaAppState implements Built<WottaAppState, WottaAppStateBuilde
 
   BuiltList<Workout> get workouts;
 
+  BuiltList<WorkoutExecution> get executions;
+
   @nullable
   @BuiltValueField(serialize: false)
   Workout get creatingWorkout;

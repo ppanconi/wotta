@@ -18,7 +18,7 @@ class StateStorage {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/wotta.json');
+    return File('$path/wotta.002.json');
   }
 
   Future<WottaAppState> readState() async {

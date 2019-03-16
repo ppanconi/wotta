@@ -25,6 +25,8 @@ abstract class WottaActions extends ReduxActions {
 
   ActionDispatcher<CallbackPayload<Executor>> completeCurrentExecutionItem;
 
+  ActionDispatcher<WorkoutExecution> saveWorkoutExecution;
+
   WottaActions._();
 
   factory WottaActions() => _$WottaActions();

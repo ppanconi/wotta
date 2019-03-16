@@ -17,9 +17,9 @@ class WorkoutsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Workouts'),
-      ),
+//      appBar: AppBar(
+//        title: Text('Workouts'),
+//      ),
       body: WorkoutsConnetor(),
       floatingActionButton: FloatingActionButton(
         key: WottaKeys.addWorkoutFab,

@@ -34,6 +34,7 @@ abstract class Executor implements Built<Executor, ExecutorBuilder> {
 abstract class Execution {
   String get title;
   List<ExecutionItem> get items;
+  DateTime get startedAt;
 
   @override
   String toString() {
@@ -139,6 +140,14 @@ abstract class _WorkoutExecutionMixin {
   }
   List<ExecutionItem> get items {
     return innerWorkoutExecution.executionItems.map((i) => WorkoutExecutionItem(i)).toList();
+  }
+
+  DateTime get startedAt {
+    if (items.length > 0 && items[0].startWorkTimestampsSec.length > 0) {
+      return DateTime.fromMillisecondsSinceEpoch(items[0].startWorkTimestampsSec[0]);
+    }
+
+    return null;
   }
 
 }

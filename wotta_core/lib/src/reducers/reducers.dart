@@ -15,6 +15,7 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.startWorkoutExecution, startWorkoutExecution)
   ..add(WottaActionsNames.togglePauseCurrentExecutionItem, togglePauseCurrentExecutionItem)
   ..add(WottaActionsNames.completeCurrentExecutionItem, completeCurrentExecutionItem)
+  ..add(WottaActionsNames.saveWorkoutExecution, saveExecution)
 
 ;
 
@@ -25,16 +26,25 @@ InnerWorkoutExecution _togglePauseExecutionItem(Executor executor, [bool toCompl
   if (executor.isPaused) {
     if (! toComplete) {
       innerExecutionItem = innerExecutionItem.rebuild((b) =>
-          b.startWorkTimestampsSec.add(DateTime
-              .now()
-              .millisecondsSinceEpoch));
+          b.startWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
+    } else {
+      // we have to complete the paused item
+      if (innerExecutionItem.startWorkTimestampsSec.length == 0) {
+        //the item is never started so we add
+        // the start end the stop simultaneity
+        var now = DateTime.now().millisecondsSinceEpoch;
+        innerExecutionItem = innerExecutionItem.rebuild((b) => b
+            ..startWorkTimestampsSec.add(now)
+            ..stopWorkTimestampsSec.add(now)
+        );
+      }
     }
   } else {
     innerExecutionItem = innerExecutionItem.rebuild((b) => b.stopWorkTimestampsSec.add(DateTime.now().millisecondsSinceEpoch));
   }
 
   InnerWorkoutExecution innerExecution = (executor.execution as WorkoutExecution).innerWorkoutExecution.rebuild( (b) => b
-      .executionItems.setRange(executor.currentExecutionItemIndex, executor.currentExecutionItemIndex, [innerExecutionItem])
+      .executionItems.setRange(executor.currentExecutionItemIndex, executor.currentExecutionItemIndex + 1, [innerExecutionItem])
   );
 
   return innerExecution;
@@ -231,4 +241,9 @@ void createNewWorkout(WottaAppState state, Action<Null> action, WottaAppStateBui
 
 void updateEntityEditingStatus(WottaAppState state, Action<EntityEditingStatus> action, WottaAppStateBuilder builder) {
   builder.currentEditingStatus = action.payload.toBuilder();
+}
+
+
+void saveExecution(WottaAppState state, Action<WorkoutExecution> action, WottaAppStateBuilder builder) {
+  builder.executions.add(action.payload);
 }

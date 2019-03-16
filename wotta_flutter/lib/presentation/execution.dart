@@ -96,17 +96,20 @@ class ExecutionViewState extends State<ExecutionView>
   @override
   Widget build(BuildContext context) {
 
-    if (itemIndex != executor.currentExecutionItemIndex) {
-      this.controller = makeAnimationController();
+    if (executor.currentExecutionItem != null) {
+      if (itemIndex != executor.currentExecutionItemIndex) {
+        this.controller = makeAnimationController();
+      }
+
+      if (controller.isAnimating && executor.isPaused)
+        controller.stop();
+      else if (!controller.isAnimating && !executor.isPaused &&
+          !executor.currentExecutionItem.manualStop) {
+        controller.reverse(
+            from: controller.value);
+      }
     }
 
-    if (controller.isAnimating && executor.isPaused)
-      controller.stop();
-    else if (!controller.isAnimating && !executor.isPaused &&
-        !executor.currentExecutionItem.manualStop) {
-      controller.reverse(
-          from: controller.value);
-    }
 
     return Scaffold(
       appBar: AppBar(

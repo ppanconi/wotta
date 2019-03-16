@@ -36,6 +36,10 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
       serializers.serialize(object.workouts,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Workout)])),
+      'executions',
+      serializers.serialize(object.executions,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(WorkoutExecution)])),
     ];
 
     return result;
@@ -57,6 +61,12 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
               specifiedType: const FullType(
                   BuiltList, const [const FullType(Workout)])) as BuiltList);
           break;
+        case 'executions':
+          result.executions.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(WorkoutExecution)]))
+              as BuiltList);
+          break;
       }
     }
 
@@ -72,6 +82,8 @@ class _$WottaAppState extends WottaAppState {
   @override
   final BuiltList<Workout> workouts;
   @override
+  final BuiltList<WorkoutExecution> executions;
+  @override
   final Workout creatingWorkout;
   @override
   final EntityEditingStatus currentEditingStatus;
@@ -85,12 +97,16 @@ class _$WottaAppState extends WottaAppState {
       {this.status,
       this.statusReport,
       this.workouts,
+      this.executions,
       this.creatingWorkout,
       this.currentEditingStatus,
       this.executor})
       : super._() {
     if (workouts == null) {
       throw new BuiltValueNullFieldError('WottaAppState', 'workouts');
+    }
+    if (executions == null) {
+      throw new BuiltValueNullFieldError('WottaAppState', 'executions');
     }
   }
 
@@ -108,6 +124,7 @@ class _$WottaAppState extends WottaAppState {
         status == other.status &&
         statusReport == other.statusReport &&
         workouts == other.workouts &&
+        executions == other.executions &&
         creatingWorkout == other.creatingWorkout &&
         currentEditingStatus == other.currentEditingStatus &&
         executor == other.executor;
@@ -118,8 +135,10 @@ class _$WottaAppState extends WottaAppState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
-                    workouts.hashCode),
+                $jc(
+                    $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
+                        workouts.hashCode),
+                    executions.hashCode),
                 creatingWorkout.hashCode),
             currentEditingStatus.hashCode),
         executor.hashCode));
@@ -131,6 +150,7 @@ class _$WottaAppState extends WottaAppState {
           ..add('status', status)
           ..add('statusReport', statusReport)
           ..add('workouts', workouts)
+          ..add('executions', executions)
           ..add('creatingWorkout', creatingWorkout)
           ..add('currentEditingStatus', currentEditingStatus)
           ..add('executor', executor))
@@ -155,6 +175,12 @@ class WottaAppStateBuilder
       _$this._workouts ??= new ListBuilder<Workout>();
   set workouts(ListBuilder<Workout> workouts) => _$this._workouts = workouts;
 
+  ListBuilder<WorkoutExecution> _executions;
+  ListBuilder<WorkoutExecution> get executions =>
+      _$this._executions ??= new ListBuilder<WorkoutExecution>();
+  set executions(ListBuilder<WorkoutExecution> executions) =>
+      _$this._executions = executions;
+
   WorkoutBuilder _creatingWorkout;
   WorkoutBuilder get creatingWorkout =>
       _$this._creatingWorkout ??= new WorkoutBuilder();
@@ -178,6 +204,7 @@ class WottaAppStateBuilder
       _status = _$v.status;
       _statusReport = _$v.statusReport;
       _workouts = _$v.workouts?.toBuilder();
+      _executions = _$v.executions?.toBuilder();
       _creatingWorkout = _$v.creatingWorkout?.toBuilder();
       _currentEditingStatus = _$v.currentEditingStatus?.toBuilder();
       _executor = _$v.executor?.toBuilder();
@@ -208,6 +235,7 @@ class WottaAppStateBuilder
               status: status,
               statusReport: statusReport,
               workouts: workouts.build(),
+              executions: executions.build(),
               creatingWorkout: _creatingWorkout?.build(),
               currentEditingStatus: _currentEditingStatus?.build(),
               executor: _executor?.build());
@@ -216,6 +244,8 @@ class WottaAppStateBuilder
       try {
         _$failedField = 'workouts';
         workouts.build();
+        _$failedField = 'executions';
+        executions.build();
         _$failedField = 'creatingWorkout';
         _creatingWorkout?.build();
         _$failedField = 'currentEditingStatus';

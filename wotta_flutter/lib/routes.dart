@@ -4,6 +4,7 @@ import 'package:wotta_core/wotta_core.dart';
 import 'package:wotta_flutter/connectors/execution_connector.dart';
 import 'package:wotta_flutter/connectors/workouts_connector.dart';
 import 'package:wotta_flutter/presentation/execution.dart';
+import 'package:wotta_flutter/presentation/home.dart';
 import 'package:wotta_flutter/presentation/workout.dart';
 
 class WottaRoutes {
@@ -13,7 +14,7 @@ class WottaRoutes {
 
   static final Map<String, WidgetBuilder> routes =  {
 
-    home: (context) { return WorkoutsView(); },
+    home: (context) { return  WottaHomePage();},
 
     addWorkout: (context) {
       return StoreConnection<WottaAppState, WottaActions, Null> (
