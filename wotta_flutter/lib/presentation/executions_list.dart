@@ -77,11 +77,12 @@ class ExecutionList extends StatelessWidget {
   Widget _buildRow(BuildContext context, WorkoutExecution execution) {
     return ListTile(
       title: Text(
-        execution.title,
+        execution.title + " - " +
+            '${(execution.spentTime.inHours).toString().padLeft(2, '0')}:${(execution.spentTime.inMinutes).toString().padLeft(2, '0')}:${(execution.spentTime.inSeconds % 60).toString().padLeft(2, '0')}',
         style: _biggerFont,
       ),
-      subtitle: Text(execution.startedAt != null ?
-        new DateFormat.yMMMMd().add_jm().format(execution.startedAt.toLocal()) : "",
+      subtitle: Text((execution.startedAt != null ?
+        new DateFormat.yMMMMd().add_jm().format(execution.startedAt.toLocal()) : "") ,
           style: _smallFont, overflow: TextOverflow.ellipsis),
 //      trailing: FlatButton(
 //          onPressed: () {

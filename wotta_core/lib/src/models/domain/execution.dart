@@ -36,6 +36,8 @@ abstract class Execution {
   List<ExecutionItem> get items;
   DateTime get startedAt;
 
+  Duration get spentTime;
+
   @override
   String toString() {
     return 'Execution{'
@@ -61,6 +63,8 @@ abstract class ExecutionItem {
 
   @nullable
   int get durationSecs;
+
+  Duration get spentTime;
 
   List<int> get startWorkTimestampsSec;
   List<int> get stopWorkTimestampsSec;
@@ -150,6 +154,9 @@ abstract class _WorkoutExecutionMixin {
     return null;
   }
 
+  Duration get spentTime {
+     return items.fold(Duration(seconds: 0), (partial, element) => partial + element.spentTime);
+  }
 }
 
 abstract class InnerWorkoutExecution
@@ -245,6 +252,17 @@ abstract class InnerWorkoutExecutionItem
 
 abstract class _WorkoutExecutionItemMixin {
   InnerWorkoutExecutionItem innerWorkoutExecutionItem;
+
+  Duration get spentTime {
+
+    int mills = 0;
+
+    for(int i = 0; i < innerWorkoutExecutionItem.stopWorkTimestampsSec.length; i++) {
+      mills += innerWorkoutExecutionItem.stopWorkTimestampsSec[i] -
+        innerWorkoutExecutionItem.startWorkTimestampsSec[i];
+    }
+    return Duration(milliseconds: mills);
+  }
 
   String get title {
     if (innerWorkoutExecutionItem.activitySequenceItem != null) {

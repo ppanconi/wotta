@@ -10,12 +10,14 @@ class TimerPainter extends CustomPainter {
     this.animation,
     this.backgroundColor,
     this.color,
-    this.enabled
+    this.enabled,
+    this.executor
   }) : super(repaint: animation);
 
   final Animation<double> animation;
   final Color backgroundColor, color;
   final bool enabled;
+  final Executor executor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -25,6 +27,10 @@ class TimerPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
+//    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, Paint()
+//      ..color = Colors.redAccent
+//      ..style = PaintingStyle.fill
+//    );
     canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
     paint.color = color;
     if (enabled) {
@@ -128,15 +134,19 @@ class ExecutionViewState extends State<ExecutionView>
                     Container(
                         margin: EdgeInsets.only(
                             left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
-                        child: Text(executor.currentExecutionItem.title,
-                            textScaleFactor: 2.0))
+                        child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(executor.currentExecutionItem.title, textScaleFactor: 2.0)],
+
+                        ),
+                    )
                   ]),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                     Container(
                         margin: EdgeInsets.only(
                             left: 5.0, top: 2.0, right: 5.0, bottom: 2.0),
                         child: Text(
-                          executor.currentExecutionItem.subTitle + ' (manual: ${executor.currentExecutionItem.manualStop})',
+                          executor.currentExecutionItem.subTitle,
                           textScaleFactor: 1.5,
                           style: TextStyle(color: Colors.black45),
                         ))
@@ -211,7 +221,8 @@ class ExecutionViewState extends State<ExecutionView>
                                     animation: controller,
                                     backgroundColor: themeData.disabledColor,
                                     color: themeData.indicatorColor,
-                                    enabled: ! this.widget.executor.currentExecutionItem.manualStop
+                                    enabled: ! executor.currentExecutionItem.manualStop,
+                                    executor: executor
                                 ));
                           },
                         )
