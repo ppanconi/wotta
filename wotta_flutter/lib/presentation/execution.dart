@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wotta_core/wotta_core.dart';
 
-
 class TimerPainter extends CustomPainter {
   TimerPainter({
     this.animation,

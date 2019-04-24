@@ -10,6 +10,7 @@ import 'package:wotta_flutter/connectors/workouts_connector.dart';
 import 'package:wotta_flutter/keys.dart';
 import 'package:wotta_flutter/presentation/commons.dart';
 import 'package:wotta_flutter/routes.dart';
+import 'package:screen/screen.dart';
 
 class WorkoutsView extends StatelessWidget {
   WorkoutsView() : super(key: WottaKeys.workoutWiev);
@@ -118,6 +119,8 @@ class WorkoutList extends StatelessWidget {
                   return StoreConnection<WottaAppState, WottaActions, Null> (
                       builder: (context, Null, actions) {
                         actions.startWorkoutExecution(workout);
+                        // Prevent screen from going into sleep mode:
+                        Screen.keepOn(true);
                         return new StartWorkoutConnector();
                       },
                       connect: (state) => null

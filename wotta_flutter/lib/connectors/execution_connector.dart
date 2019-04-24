@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:screen/screen.dart';
 import 'package:wotta_core/wotta_core.dart';
 import 'package:wotta_flutter/presentation/execution.dart';
 
@@ -16,7 +17,6 @@ class StartWorkoutConnector extends StoreConnector<WottaAppState, WottaActions, 
                 actions.completeCurrentExecutionItem(
                     CallbackPayload(executor, (state) {
                       if (state.executor.currentExecutionItem == null) {
-
 
                         showDialog<void>(
                           context: context,
@@ -47,6 +47,7 @@ class StartWorkoutConnector extends StoreConnector<WottaAppState, WottaActions, 
                                   ),
                                   onPressed: () {
                                     actions.saveWorkoutExecution(state.executor.execution as WorkoutExecution);
+                                    Screen.keepOn(false);
                                     Navigator.of(context).pop();
                                   },
                                 ),
