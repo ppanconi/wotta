@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wotta_core/wotta_core.dart';
+import 'package:audioplayers/audio_cache.dart';
+
 
 class TimerPainter extends CustomPainter {
   TimerPainter({
@@ -30,6 +32,7 @@ class TimerPainter extends CustomPainter {
 //      ..color = Colors.redAccent
 //      ..style = PaintingStyle.fill
 //    );
+
     canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
     paint.color = color;
     if (enabled) {
@@ -63,8 +66,13 @@ class ExecutionView extends StatefulWidget {
 
 class ExecutionViewState extends State<ExecutionView>
     with TickerProviderStateMixin {
+
+  static AudioCache player = new AudioCache();
+
   AnimationController controller;
   int itemIndex;
+
+  int secs;
 
   Executor get executor => widget.executor;
 
@@ -83,16 +91,46 @@ class ExecutionViewState extends State<ExecutionView>
 
   AnimationController makeAnimationController() {
     itemIndex = executor.currentExecutionItemIndex;
+
+    var duration = Duration(seconds: executor.currentExecutionItem.manualStop ? 0
+          : executor.currentExecutionItem.durationSecs);
+
+    secs = duration.inSeconds;
+
     var animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: executor.currentExecutionItem.manualStop ? 0
-          : executor.currentExecutionItem.durationSecs),
+      duration: duration,
       value: 1.0,
 
     );
     animationController.addStatusListener((status) {
       // dismissed because we use a reverse
       if(status == AnimationStatus.dismissed) {
+
+
+        // we have a no manual stop training item
+        // and it's not the last so we sound the bell
+        if (! executor.currentExecutionItem.manualStop) {
+
+          if (executor.currentExecutionItem.isWork &&
+              executor.currentExecutionItemIndex < executor.execution.items.length - 1 ) {
+            ExecutionViewState.player.play('sound_bell_boxing_1.ogg');
+          }
+
+          if (! executor.currentExecutionItem.isWork &&
+              executor.currentExecutionItemIndex < executor.execution.items.length - 1  &&
+              ! executor.execution.items[executor.currentExecutionItemIndex + 1].isRest
+          ) {
+            ExecutionViewState.player.play('sound_whistle_01.ogg');
+          }
+
+        }
+
+        if (executor.currentExecutionItemIndex == executor.execution.items.length - 1
+        ) {
+          ExecutionViewState.player.play('sound_bell_boxing_3.ogg');
+        }
+
         this.widget.completeCurrentItem(executor);
       }
     });
@@ -235,6 +273,13 @@ class ExecutionViewState extends State<ExecutionView>
                             AnimatedBuilder(
                                 animation: controller,
                                 builder: (BuildContext context, Widget child) {
+                                  
+                                Duration duration = controller.duration * controller.value;
+                                if (duration.inSeconds < 5 && duration.inSeconds < secs) {
+                                  player.play('sound_click.ogg');
+                                  secs = duration.inSeconds;
+                                }
+
                                   return new Container(
                                     padding: EdgeInsets.only(top: 35.0),
                                     child: Text(

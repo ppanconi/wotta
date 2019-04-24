@@ -60,6 +60,7 @@ abstract class ExecutionItem {
 
   bool get manualStop;
   bool get isRest;
+  bool get isWork;
 
   @nullable
   int get durationSecs;
@@ -305,6 +306,10 @@ abstract class _WorkoutExecutionItemMixin {
 
   bool get isRest {
     return innerWorkoutExecutionItem.type == WorkoutExecutionItemType.REST;
+  }
+
+  bool get isWork {
+    return innerWorkoutExecutionItem.type == WorkoutExecutionItemType.WORK;
   }
 
   bool get manualStop {
