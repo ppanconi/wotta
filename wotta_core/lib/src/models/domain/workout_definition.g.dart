@@ -6,19 +6,6 @@ part of workout_definition;
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-// ignore_for_file: unnecessary_const
-// ignore_for_file: unnecessary_new
-// ignore_for_file: test_types_in_equals
-
 Serializer<WorkoutDefinition> _$workoutDefinitionSerializer =
     new _$WorkoutDefinitionSerializer();
 Serializer<ActivityDefinitionSequenceItem>
@@ -37,7 +24,7 @@ class _$WorkoutDefinitionSerializer
   final String wireName = 'WorkoutDefinition';
 
   @override
-  Iterable serialize(Serializers serializers, WorkoutDefinition object,
+  Iterable<Object> serialize(Serializers serializers, WorkoutDefinition object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'activityDefinitionSequence',
@@ -63,12 +50,12 @@ class _$WorkoutDefinitionSerializer
         ..add(serializers.serialize(object.cooldown,
             specifiedType: const FullType(ActivityWork)));
     }
-
     return result;
   }
 
   @override
-  WorkoutDefinition deserialize(Serializers serializers, Iterable serialized,
+  WorkoutDefinition deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WorkoutDefinitionBuilder();
 
@@ -91,7 +78,7 @@ class _$WorkoutDefinitionSerializer
               value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(ActivityDefinitionSequenceItem)
-              ])) as BuiltList);
+              ])) as BuiltList<dynamic>);
           break;
         case 'cooldown':
           result.cooldown.replace(serializers.deserialize(value,
@@ -115,7 +102,7 @@ class _$ActivityDefinitionSequenceItemSerializer
   final String wireName = 'ActivityDefinitionSequenceItem';
 
   @override
-  Iterable serialize(
+  Iterable<Object> serialize(
       Serializers serializers, ActivityDefinitionSequenceItem object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
@@ -132,7 +119,7 @@ class _$ActivityDefinitionSequenceItemSerializer
 
   @override
   ActivityDefinitionSequenceItem deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActivityDefinitionSequenceItemBuilder();
 
@@ -166,7 +153,7 @@ class _$ActivityDefinitionSerializer
   final String wireName = 'ActivityDefinition';
 
   @override
-  Iterable serialize(Serializers serializers, ActivityDefinition object,
+  Iterable<Object> serialize(Serializers serializers, ActivityDefinition object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'name',
@@ -194,12 +181,12 @@ class _$ActivityDefinitionSerializer
         ..add(serializers.serialize(object.video,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  ActivityDefinition deserialize(Serializers serializers, Iterable serialized,
+  ActivityDefinition deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActivityDefinitionBuilder();
 
@@ -229,7 +216,7 @@ class _$ActivityDefinitionSerializer
           result.activityWorkSequence.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ActivityWork)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -245,7 +232,7 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
   final String wireName = 'ActivityWork';
 
   @override
-  Iterable serialize(Serializers serializers, ActivityWork object,
+  Iterable<Object> serialize(Serializers serializers, ActivityWork object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'activityWorkIndex',
@@ -264,6 +251,12 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
         ..add(serializers.serialize(object.numberOfRepetitions,
             specifiedType: const FullType(int)));
     }
+    if (object.optimalDurationSecs != null) {
+      result
+        ..add('optimalDurationSecs')
+        ..add(serializers.serialize(object.optimalDurationSecs,
+            specifiedType: const FullType(int)));
+    }
     if (object.workDurationSecs != null) {
       result
         ..add('workDurationSecs')
@@ -276,12 +269,11 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
         ..add(serializers.serialize(object.restDurationSecs,
             specifiedType: const FullType(int)));
     }
-
     return result;
   }
 
   @override
-  ActivityWork deserialize(Serializers serializers, Iterable serialized,
+  ActivityWork deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActivityWorkBuilder();
 
@@ -297,6 +289,10 @@ class _$ActivityWorkSerializer implements StructuredSerializer<ActivityWork> {
           break;
         case 'numberOfRepetitions':
           result.numberOfRepetitions = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'optimalDurationSecs':
+          result.optimalDurationSecs = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
         case 'manualWorkStop':
@@ -332,7 +328,8 @@ class _$WorkoutDefinition extends WorkoutDefinition {
   @override
   final ActivityWork cooldown;
 
-  factory _$WorkoutDefinition([void updates(WorkoutDefinitionBuilder b)]) =>
+  factory _$WorkoutDefinition(
+          [void Function(WorkoutDefinitionBuilder) updates]) =>
       (new WorkoutDefinitionBuilder()..update(updates)).build();
 
   _$WorkoutDefinition._(
@@ -345,7 +342,7 @@ class _$WorkoutDefinition extends WorkoutDefinition {
   }
 
   @override
-  WorkoutDefinition rebuild(void updates(WorkoutDefinitionBuilder b)) =>
+  WorkoutDefinition rebuild(void Function(WorkoutDefinitionBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -430,7 +427,7 @@ class WorkoutDefinitionBuilder
   }
 
   @override
-  void update(void updates(WorkoutDefinitionBuilder b)) {
+  void update(void Function(WorkoutDefinitionBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -471,7 +468,7 @@ class _$ActivityDefinitionSequenceItem extends ActivityDefinitionSequenceItem {
   final int restBetweenActivity;
 
   factory _$ActivityDefinitionSequenceItem(
-          [void updates(ActivityDefinitionSequenceItemBuilder b)]) =>
+          [void Function(ActivityDefinitionSequenceItemBuilder) updates]) =>
       (new ActivityDefinitionSequenceItemBuilder()..update(updates)).build();
 
   _$ActivityDefinitionSequenceItem._(
@@ -489,7 +486,7 @@ class _$ActivityDefinitionSequenceItem extends ActivityDefinitionSequenceItem {
 
   @override
   ActivityDefinitionSequenceItem rebuild(
-          void updates(ActivityDefinitionSequenceItemBuilder b)) =>
+          void Function(ActivityDefinitionSequenceItemBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -556,7 +553,7 @@ class ActivityDefinitionSequenceItemBuilder
   }
 
   @override
-  void update(void updates(ActivityDefinitionSequenceItemBuilder b)) {
+  void update(void Function(ActivityDefinitionSequenceItemBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -596,7 +593,8 @@ class _$ActivityDefinition extends ActivityDefinition {
   @override
   final BuiltList<ActivityWork> activityWorkSequence;
 
-  factory _$ActivityDefinition([void updates(ActivityDefinitionBuilder b)]) =>
+  factory _$ActivityDefinition(
+          [void Function(ActivityDefinitionBuilder) updates]) =>
       (new ActivityDefinitionBuilder()..update(updates)).build();
 
   _$ActivityDefinition._(
@@ -616,7 +614,8 @@ class _$ActivityDefinition extends ActivityDefinition {
   }
 
   @override
-  ActivityDefinition rebuild(void updates(ActivityDefinitionBuilder b)) =>
+  ActivityDefinition rebuild(
+          void Function(ActivityDefinitionBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -705,7 +704,7 @@ class ActivityDefinitionBuilder
   }
 
   @override
-  void update(void updates(ActivityDefinitionBuilder b)) {
+  void update(void Function(ActivityDefinitionBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -742,6 +741,8 @@ class _$ActivityWork extends ActivityWork {
   @override
   final int numberOfRepetitions;
   @override
+  final int optimalDurationSecs;
+  @override
   final bool manualWorkStop;
   @override
   final int workDurationSecs;
@@ -750,12 +751,13 @@ class _$ActivityWork extends ActivityWork {
   @override
   final int restDurationSecs;
 
-  factory _$ActivityWork([void updates(ActivityWorkBuilder b)]) =>
+  factory _$ActivityWork([void Function(ActivityWorkBuilder) updates]) =>
       (new ActivityWorkBuilder()..update(updates)).build();
 
   _$ActivityWork._(
       {this.activityWorkIndex,
       this.numberOfRepetitions,
+      this.optimalDurationSecs,
       this.manualWorkStop,
       this.workDurationSecs,
       this.manualRestStop,
@@ -773,7 +775,7 @@ class _$ActivityWork extends ActivityWork {
   }
 
   @override
-  ActivityWork rebuild(void updates(ActivityWorkBuilder b)) =>
+  ActivityWork rebuild(void Function(ActivityWorkBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -785,6 +787,7 @@ class _$ActivityWork extends ActivityWork {
     return other is ActivityWork &&
         activityWorkIndex == other.activityWorkIndex &&
         numberOfRepetitions == other.numberOfRepetitions &&
+        optimalDurationSecs == other.optimalDurationSecs &&
         manualWorkStop == other.manualWorkStop &&
         workDurationSecs == other.workDurationSecs &&
         manualRestStop == other.manualRestStop &&
@@ -797,8 +800,10 @@ class _$ActivityWork extends ActivityWork {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc(0, activityWorkIndex.hashCode),
-                        numberOfRepetitions.hashCode),
+                    $jc(
+                        $jc($jc(0, activityWorkIndex.hashCode),
+                            numberOfRepetitions.hashCode),
+                        optimalDurationSecs.hashCode),
                     manualWorkStop.hashCode),
                 workDurationSecs.hashCode),
             manualRestStop.hashCode),
@@ -810,6 +815,7 @@ class _$ActivityWork extends ActivityWork {
     return (newBuiltValueToStringHelper('ActivityWork')
           ..add('activityWorkIndex', activityWorkIndex)
           ..add('numberOfRepetitions', numberOfRepetitions)
+          ..add('optimalDurationSecs', optimalDurationSecs)
           ..add('manualWorkStop', manualWorkStop)
           ..add('workDurationSecs', workDurationSecs)
           ..add('manualRestStop', manualRestStop)
@@ -831,6 +837,11 @@ class ActivityWorkBuilder
   int get numberOfRepetitions => _$this._numberOfRepetitions;
   set numberOfRepetitions(int numberOfRepetitions) =>
       _$this._numberOfRepetitions = numberOfRepetitions;
+
+  int _optimalDurationSecs;
+  int get optimalDurationSecs => _$this._optimalDurationSecs;
+  set optimalDurationSecs(int optimalDurationSecs) =>
+      _$this._optimalDurationSecs = optimalDurationSecs;
 
   bool _manualWorkStop;
   bool get manualWorkStop => _$this._manualWorkStop;
@@ -858,6 +869,7 @@ class ActivityWorkBuilder
     if (_$v != null) {
       _activityWorkIndex = _$v.activityWorkIndex;
       _numberOfRepetitions = _$v.numberOfRepetitions;
+      _optimalDurationSecs = _$v.optimalDurationSecs;
       _manualWorkStop = _$v.manualWorkStop;
       _workDurationSecs = _$v.workDurationSecs;
       _manualRestStop = _$v.manualRestStop;
@@ -876,7 +888,7 @@ class ActivityWorkBuilder
   }
 
   @override
-  void update(void updates(ActivityWorkBuilder b)) {
+  void update(void Function(ActivityWorkBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -886,6 +898,7 @@ class ActivityWorkBuilder
         new _$ActivityWork._(
             activityWorkIndex: activityWorkIndex,
             numberOfRepetitions: numberOfRepetitions,
+            optimalDurationSecs: optimalDurationSecs,
             manualWorkStop: manualWorkStop,
             workDurationSecs: workDurationSecs,
             manualRestStop: manualRestStop,
@@ -894,3 +907,5 @@ class ActivityWorkBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -6,19 +6,6 @@ part of uniform_workout_definition;
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-// ignore_for_file: unnecessary_const
-// ignore_for_file: unnecessary_new
-// ignore_for_file: test_types_in_equals
-
 Serializer<ActivityUniformDefinition> _$activityUniformDefinitionSerializer =
     new _$ActivityUniformDefinitionSerializer();
 Serializer<UniformWorkoutDefinition> _$uniformWorkoutDefinitionSerializer =
@@ -35,7 +22,8 @@ class _$ActivityUniformDefinitionSerializer
   final String wireName = 'ActivityUniformDefinition';
 
   @override
-  Iterable serialize(Serializers serializers, ActivityUniformDefinition object,
+  Iterable<Object> serialize(
+      Serializers serializers, ActivityUniformDefinition object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'numberOfSeries',
@@ -60,13 +48,12 @@ class _$ActivityUniformDefinitionSerializer
         ..add(serializers.serialize(object.restDurationSecs,
             specifiedType: const FullType(int)));
     }
-
     return result;
   }
 
   @override
   ActivityUniformDefinition deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActivityUniformDefinitionBuilder();
 
@@ -114,7 +101,8 @@ class _$UniformWorkoutDefinitionSerializer
   final String wireName = 'UniformWorkoutDefinition';
 
   @override
-  Iterable serialize(Serializers serializers, UniformWorkoutDefinition object,
+  Iterable<Object> serialize(
+      Serializers serializers, UniformWorkoutDefinition object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'warmupDurationSecs',
@@ -139,13 +127,12 @@ class _$UniformWorkoutDefinitionSerializer
         ..add(serializers.serialize(object.id,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
   UniformWorkoutDefinition deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new UniformWorkoutDefinitionBuilder();
 
@@ -200,7 +187,7 @@ class _$ActivityUniformDefinition extends ActivityUniformDefinition {
   final int restDurationSecs;
 
   factory _$ActivityUniformDefinition(
-          [void updates(ActivityUniformDefinitionBuilder b)]) =>
+          [void Function(ActivityUniformDefinitionBuilder) updates]) =>
       (new ActivityUniformDefinitionBuilder()..update(updates)).build();
 
   _$ActivityUniformDefinition._(
@@ -226,7 +213,7 @@ class _$ActivityUniformDefinition extends ActivityUniformDefinition {
 
   @override
   ActivityUniformDefinition rebuild(
-          void updates(ActivityUniformDefinitionBuilder b)) =>
+          void Function(ActivityUniformDefinitionBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -319,7 +306,7 @@ class ActivityUniformDefinitionBuilder
   }
 
   @override
-  void update(void updates(ActivityUniformDefinitionBuilder b)) {
+  void update(void Function(ActivityUniformDefinitionBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -352,7 +339,7 @@ class _$UniformWorkoutDefinition extends UniformWorkoutDefinition {
   final int calldownDurationSecs;
 
   factory _$UniformWorkoutDefinition(
-          [void updates(UniformWorkoutDefinitionBuilder b)]) =>
+          [void Function(UniformWorkoutDefinitionBuilder) updates]) =>
       (new UniformWorkoutDefinitionBuilder()..update(updates)).build();
 
   _$UniformWorkoutDefinition._(
@@ -387,7 +374,7 @@ class _$UniformWorkoutDefinition extends UniformWorkoutDefinition {
 
   @override
   UniformWorkoutDefinition rebuild(
-          void updates(UniformWorkoutDefinitionBuilder b)) =>
+          void Function(UniformWorkoutDefinitionBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -490,7 +477,7 @@ class UniformWorkoutDefinitionBuilder
   }
 
   @override
-  void update(void updates(UniformWorkoutDefinitionBuilder b)) {
+  void update(void Function(UniformWorkoutDefinitionBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -521,3 +508,5 @@ class UniformWorkoutDefinitionBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

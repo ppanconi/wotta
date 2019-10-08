@@ -85,6 +85,9 @@ abstract class ActivityWork implements Built<ActivityWork, ActivityWorkBuilder> 
   @nullable
   int get numberOfRepetitions;
 
+  @nullable
+  int get optimalDurationSecs;
+
   bool get manualWorkStop;
 
   @nullable

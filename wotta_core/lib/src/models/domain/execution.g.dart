@@ -6,19 +6,6 @@ part of execution;
 // BuiltValueGenerator
 // **************************************************************************
 
-// ignore_for_file: always_put_control_body_on_new_line
-// ignore_for_file: annotate_overrides
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_catches_without_on_clauses
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: prefer_expression_function_bodies
-// ignore_for_file: sort_constructors_first
-// ignore_for_file: unnecessary_const
-// ignore_for_file: unnecessary_new
-// ignore_for_file: test_types_in_equals
-
 const WorkoutExecutionItemType _$WARMUP =
     const WorkoutExecutionItemType._('WARMUP');
 const WorkoutExecutionItemType _$COOLDOWN =
@@ -71,7 +58,7 @@ class _$ExecutorSerializer implements StructuredSerializer<Executor> {
   final String wireName = 'Executor';
 
   @override
-  Iterable serialize(Serializers serializers, Executor object,
+  Iterable<Object> serialize(Serializers serializers, Executor object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'execution',
@@ -87,12 +74,11 @@ class _$ExecutorSerializer implements StructuredSerializer<Executor> {
         ..add(serializers.serialize(object.currentExecutionItemIndex,
             specifiedType: const FullType(int)));
     }
-
     return result;
   }
 
   @override
-  Executor deserialize(Serializers serializers, Iterable serialized,
+  Executor deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ExecutorBuilder();
 
@@ -132,7 +118,8 @@ class _$InnerWorkoutExecutionSerializer
   final String wireName = 'InnerWorkoutExecution';
 
   @override
-  Iterable serialize(Serializers serializers, InnerWorkoutExecution object,
+  Iterable<Object> serialize(
+      Serializers serializers, InnerWorkoutExecution object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'workout',
@@ -152,7 +139,7 @@ class _$InnerWorkoutExecutionSerializer
 
   @override
   InnerWorkoutExecution deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new InnerWorkoutExecutionBuilder();
 
@@ -175,7 +162,7 @@ class _$InnerWorkoutExecutionSerializer
           result.executionItems.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(InnerWorkoutExecutionItem)
-              ])) as BuiltList);
+              ])) as BuiltList<dynamic>);
           break;
       }
     }
@@ -195,7 +182,8 @@ class _$InnerWorkoutExecutionItemSerializer
   final String wireName = 'InnerWorkoutExecutionItem';
 
   @override
-  Iterable serialize(Serializers serializers, InnerWorkoutExecutionItem object,
+  Iterable<Object> serialize(
+      Serializers serializers, InnerWorkoutExecutionItem object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'type',
@@ -222,13 +210,12 @@ class _$InnerWorkoutExecutionItemSerializer
         ..add(serializers.serialize(object.activityWork,
             specifiedType: const FullType(ActivityWork)));
     }
-
     return result;
   }
 
   @override
   InnerWorkoutExecutionItem deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new InnerWorkoutExecutionItemBuilder();
 
@@ -256,13 +243,13 @@ class _$InnerWorkoutExecutionItemSerializer
           result.startWorkTimestampsSec.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'stopWorkTimestampsSec':
           result.stopWorkTimestampsSec.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -298,7 +285,7 @@ class _$Executor extends Executor {
   @override
   final bool isPaused;
 
-  factory _$Executor([void updates(ExecutorBuilder b)]) =>
+  factory _$Executor([void Function(ExecutorBuilder) updates]) =>
       (new ExecutorBuilder()..update(updates)).build();
 
   _$Executor._({this.execution, this.currentExecutionItemIndex, this.isPaused})
@@ -312,7 +299,7 @@ class _$Executor extends Executor {
   }
 
   @override
-  Executor rebuild(void updates(ExecutorBuilder b)) =>
+  Executor rebuild(void Function(ExecutorBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -381,7 +368,7 @@ class ExecutorBuilder implements Builder<Executor, ExecutorBuilder> {
   }
 
   @override
-  void update(void updates(ExecutorBuilder b)) {
+  void update(void Function(ExecutorBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -406,7 +393,7 @@ class _$InnerWorkoutExecution extends InnerWorkoutExecution {
   final BuiltList<InnerWorkoutExecutionItem> executionItems;
 
   factory _$InnerWorkoutExecution(
-          [void updates(InnerWorkoutExecutionBuilder b)]) =>
+          [void Function(InnerWorkoutExecutionBuilder) updates]) =>
       (new InnerWorkoutExecutionBuilder()..update(updates)).build();
 
   _$InnerWorkoutExecution._(
@@ -425,7 +412,8 @@ class _$InnerWorkoutExecution extends InnerWorkoutExecution {
   }
 
   @override
-  InnerWorkoutExecution rebuild(void updates(InnerWorkoutExecutionBuilder b)) =>
+  InnerWorkoutExecution rebuild(
+          void Function(InnerWorkoutExecutionBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -498,7 +486,7 @@ class InnerWorkoutExecutionBuilder
   }
 
   @override
-  void update(void updates(InnerWorkoutExecutionBuilder b)) {
+  void update(void Function(InnerWorkoutExecutionBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -544,7 +532,7 @@ class _$InnerWorkoutExecutionItem extends InnerWorkoutExecutionItem {
   final BuiltList<int> stopWorkTimestampsSec;
 
   factory _$InnerWorkoutExecutionItem(
-          [void updates(InnerWorkoutExecutionItemBuilder b)]) =>
+          [void Function(InnerWorkoutExecutionItemBuilder) updates]) =>
       (new InnerWorkoutExecutionItemBuilder()..update(updates)).build();
 
   _$InnerWorkoutExecutionItem._(
@@ -569,7 +557,7 @@ class _$InnerWorkoutExecutionItem extends InnerWorkoutExecutionItem {
 
   @override
   InnerWorkoutExecutionItem rebuild(
-          void updates(InnerWorkoutExecutionItemBuilder b)) =>
+          void Function(InnerWorkoutExecutionItemBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -669,7 +657,7 @@ class InnerWorkoutExecutionItemBuilder
   }
 
   @override
-  void update(void updates(InnerWorkoutExecutionItemBuilder b)) {
+  void update(void Function(InnerWorkoutExecutionItemBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -706,3 +694,5 @@ class InnerWorkoutExecutionItemBuilder
     return _$result;
   }
 }
+
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -12,10 +12,10 @@ main() {
       ..id = 'myid'
       ..title = "mytitle"
   );
-//  print('My first Workout:${workout}');
+  print('My first Workout:${workout}');
 
 
-//  print('Workout Json: ${json.encode(standardSerializers.serializeWith(Workout.serializer, workout))}');
+  print('Workout Json: ${json.encode(standardSerializers.serializeWith(Workout.serializer, workout))}');
 
   final workoutDefinition = WorkoutDefinition((b) => b
       ..id = "definition1"
@@ -35,9 +35,9 @@ main() {
     )
 
   );
-//  print('WorkoutDefinition ${workoutDefinition}');
+  print('WorkoutDefinition ${workoutDefinition}');
 
-//  print('WorkoutDefinition Json: ${json.encode(standardSerializers.serializeWith(WorkoutDefinition.serializer, workoutDefinition))}');
+  print('WorkoutDefinition Json: ${json.encode(standardSerializers.serializeWith(WorkoutDefinition.serializer, workoutDefinition))}');
 
   var store = new Store(wottaReducerBuilder.build(), WottaAppState(), WottaActions());
 

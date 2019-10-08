@@ -2,17 +2,18 @@ name: wotta_core
 description: A starting point for Dart libraries or applications.
 # version: 1.0.0
 # homepage: https://www.example.com
-# author: paolo <email@example.com>
+# author: paolo <p.panconi@gmail.com>
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.5.0 <3.0.0'
 
 dependencies:
-  built_redux: ^7.5.0
-  built_value: ^6.1.2
-#  path: ^1.4.1
+  built_value: ^6.7.1
+  built_redux: ^7.5.4
+#  path: ^1.6.0
 
 dev_dependencies:
-  test: ^1.0.0
-  build_runner: ^0.10.0
-  built_value_generator: ^6.1.2
+  build_runner: ^1.7.1
+  built_value_generator: ^6.7.1
+  pedantic: ^1.8.0
+  test: ^1.6.0

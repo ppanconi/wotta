@@ -45,7 +45,7 @@ class WottaHomePage extends StatelessWidget {
 //          ),
 //        ),
         body: DefaultTabController(
-          length: 3,
+          length: 2,
           child: Scaffold(
             appBar: AppBar(
               actions: <Widget>[],
@@ -67,7 +67,7 @@ class WottaHomePage extends StatelessWidget {
                         onRemove: actions.deleteExecutionAction,
                         onUndoRemove: actions.restoreExecutionAction,
                       ),
-                ) ,
+                )
               ],
             ),
           ),

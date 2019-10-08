@@ -190,6 +190,7 @@ WorkoutDefinition makeDefinitionFromUniformDefinition(UniformWorkoutDefinition u
                     ..workDurationSecs = uniformDef.activityDefinition.serieDurationSecs
                     ..manualRestStop = uniformDef.activityDefinition.manualStopRest
                     ..restDurationSecs = uniformDef.activityDefinition.restDurationSecs
+                    ..optimalDurationSecs = 30
                     ..activityWorkIndex = j
                   ));
                 }
