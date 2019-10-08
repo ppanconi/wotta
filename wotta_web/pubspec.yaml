@@ -1,0 +1,25 @@
+name: land
+description: An absolute bare-bones web app.
+# version: 1.0.0
+#homepage: https://www.example.com
+#author: paolo <email@example.com>
+
+environment:
+  sdk: '>=2.5.0 <3.0.0'
+
+dependencies:
+  uri: ^0.11.3+1
+  over_react: ^2.5.2
+  qr: ^1.2.0
+#  path: ^1.4.1
+
+dev_dependencies:
+  build_runner: ^1.7.0
+  build_test: ^0.10.8
+  build_web_compilers: ^2.4.0
+  dart_dev: ^2.2.0
+  dart_style: ^1.2.7
+  over_react_test: ^2.5.1
+  test: ^1.6.10
+  pedantic: ^1.7.0
+

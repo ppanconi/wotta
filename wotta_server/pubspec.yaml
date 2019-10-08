@@ -1,0 +1,21 @@
+name: server
+description: A web server built using the shelf package.
+# version: 1.0.0
+# homepage: https://www.example.com
+# author: paolo <email@example.com>
+
+environment:
+  sdk: '>=2.1.0 <3.0.0'
+
+dependencies:
+  args: ^1.4.2
+  shelf: ^0.7.5
+  shelf_router: ^0.7.1
+  shelf_proxy: ^0.1.0+6
+  shelf_static: ^0.2.8
+  shelf_web_socket: ^0.2.3
+  shelf_packages_handler: ^1.0.4
+
+dev_dependencies:
+  pedantic: ^1.0.0
+  test: ^1.6.0
