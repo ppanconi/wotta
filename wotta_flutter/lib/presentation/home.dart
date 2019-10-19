@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:wotta_core/wotta_core.dart';
 import 'package:wotta_flutter/presentation/executions_list.dart';
+import 'package:wotta_flutter/presentation/qrscanner.dart';
 import 'package:wotta_flutter/presentation/workout.dart';
 
 class WottaHomePage extends StatelessWidget {
@@ -45,7 +46,7 @@ class WottaHomePage extends StatelessWidget {
 //          ),
 //        ),
         body: DefaultTabController(
-          length: 2,
+          length: 3,
           child: Scaffold(
             appBar: AppBar(
               actions: <Widget>[],
@@ -53,6 +54,7 @@ class WottaHomePage extends StatelessWidget {
                 tabs: [
                   Tab(icon: Icon(Icons.edit)),
                   Tab(icon: Icon(Icons.timer)),
+                  Tab(icon: Icon(Icons.web))
                 ],
                 indicatorColor: Colors.white,
               ),
@@ -67,7 +69,8 @@ class WottaHomePage extends StatelessWidget {
                         onRemove: actions.deleteExecutionAction,
                         onUndoRemove: actions.restoreExecutionAction,
                       ),
-                )
+                ),
+                ScanScreen()
               ],
             ),
           ),

@@ -3,10 +3,6 @@
 
 FROM google/dart:2.6-dev AS dart-runtime
 
-# we need to run pub get twice
-# for the reason see official base image documentation
-# @ https://hub.docker.com/r/google/dart
-
 RUN pub global activate webdev
 
 #Building wotta_web with local module libs (wotta_core)

@@ -1,11 +1,17 @@
 # build form the parent dir
 # docker build -f wotta_server/Dockerfile .
 
-# Deprecated use Dockerfile in parent dir
+#
+# DEPRECATED USE DOCKERFILE IN PARENT DIR
+#
 
 FROM google/dart:2.5.0 AS dart-runtime
 
 WORKDIR /app
+
+# we need to run pub get twice
+# for the reason see official base image documentation
+# @ https://hub.docker.com/r/google/dart
 
 ADD wotta_server/pubspec.* /app/
 RUN pub get
