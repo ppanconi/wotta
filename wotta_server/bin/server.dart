@@ -61,7 +61,7 @@ main(List<String> args) async {
       .addMiddleware(logRequests())
       .addHandler(cascade.handler);
 
-  var server = await serve(handler, 'localhost', port);
+  var server = await serve(handler, '0.0.0.0', port);
   print('Serving at http://${server.address.host}:${server.port}');
 
 }

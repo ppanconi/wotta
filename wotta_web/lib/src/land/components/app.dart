@@ -72,7 +72,9 @@ class AppComponent extends UiStatefulComponent<AppProps, AppState> {
 
     if (state.key == null) {
 
-      return (Dom.div()..className = 'container')("${state.status}");
+      return (Dom.div()..className = 'container')(
+          Dom.h1()("Wotta ${state.status}")
+      );
 
     } else {
       ReactElement canvas = (Dom.canvas()

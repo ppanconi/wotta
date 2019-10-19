@@ -666,6 +666,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.15"
+  wotta_core:
+    dependency: "direct dev"
+    description:
+      path: "../wotta_core"
+      relative: true
+    source: path
+    version: "0.0.0"
   yaml:
     dependency: transitive
     description:
