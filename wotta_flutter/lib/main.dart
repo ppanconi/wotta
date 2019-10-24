@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:wotta_core/wotta_core.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:wotta_flutter/routes.dart';
+import 'beckend/session_state.dart';
 import 'middlewares.dart';
 import 'package:flutter/services.dart';
 
@@ -56,10 +58,13 @@ class AppState extends State<WottaApp> {
   Widget build(BuildContext context) {
     return ReduxProvider(
       store: store,
-      child: MaterialApp(
-        title: 'Wotta',
-        routes: WottaRoutes.routes,
-      ),
+      child: ChangeNotifierProvider(
+        builder: (context) => WebRemoteSession(store.state, store.actions),
+        child: MaterialApp(
+          title: 'Wotta',
+          routes: WottaRoutes.routes,
+        )
+      )
     );
   }
 }

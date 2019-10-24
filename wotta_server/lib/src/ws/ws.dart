@@ -15,10 +15,13 @@ class WebToAppChannel {
   WebSocketChannel webWS;
   StreamSubscription webStreamSubscription;
   WebSocketChannel appWS;
-  StreamSubscription appStreamSubscription;
 
   WebToAppChannel(this.key, this.webWS) {
     webStreamSubscription = webWS.stream.listen((data) =>  webMessagesHandler(data));
+  }
+
+  bool isActive() {
+    return appWS != null;
   }
 
   void webMessagesHandler(dynamic msgFromWeb) {
@@ -80,7 +83,7 @@ provideWsHandler(Router router) {
     print('INFO got connection from new app client for channel key ${key}');
 
     var channel = channels[key];
-    if (channel != null) {
+    if (channel != null && ! channel.isActive()) {
       channel.addAppConnection(appSocket);
     } else {
       appSocket.sink.close(1003, 'Invalid key');

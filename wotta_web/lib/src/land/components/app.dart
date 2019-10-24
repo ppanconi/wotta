@@ -42,6 +42,9 @@ class AppComponent extends UiStatefulComponent<AppProps, AppState> {
       var msg = jsonDecode(e.data);
       if (msg['type'] == 'KEY') {
         updateKey(msg['key']);
+      } else if (msg['type'] == 'CHANNEL_READY') {
+        updateStatus(e.data);
+        props.webSocket.send(e.data);
       } else {
         updateStatus(e.data);
       }
