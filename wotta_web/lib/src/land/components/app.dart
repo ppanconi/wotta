@@ -5,17 +5,18 @@ UiFactory<AppProps> App = _$App;
 
 @Props()
 class _$AppProps extends UiProps {
-  String initialStatus;
+  AppStatus initialStatus;
   WebSocket webSocket;
-
 }
 
 @State()
 class _$AppState extends UiState {
-  String status;
+  AppStatus status;
   String key;
+  Store store;
 }
 
+enum AppStatus { loading, connected, closed }
 
 @Component()
 class AppComponent extends UiStatefulComponent<AppProps, AppState> {
@@ -30,34 +31,41 @@ class AppComponent extends UiStatefulComponent<AppProps, AppState> {
   Map getInitialState() {
     return newState()
       ..status = props.initialStatus
-      ..key = null;
+      ..key = null
+      ..store = null;
   }
 
   @override
   void componentDidMount() {
     super.componentDidMount();
     props.webSocket.onMessage.listen((MessageEvent e) {
-
       print('DEBUG revieved message: ${e.data}');
       var msg = jsonDecode(e.data);
       if (msg['type'] == 'KEY') {
         updateKey(msg['key']);
       } else if (msg['type'] == 'CHANNEL_READY') {
-        updateStatus(e.data);
+        print('channel is ready');
         props.webSocket.send(e.data);
-      } else {
-        updateStatus(e.data);
-      }
+      } else if (msg['type'] == 'STATE_DATA') {
+        print('data state recieved');
 
-      if (msg['type'] == 'PING') {
-        props.webSocket.send('PONG');
+        var stateData = msg['data'];
+        WottaAppState state = standardSerializers.deserializeWith(
+            WottaAppState.serializer, json.decode(stateData));
+        var _store = Store(wottaReducerBuilder.build(), state, WottaActions());
+        updateStatus(AppStatus.connected, _store);
       }
-
     });
 
     props.webSocket.onOpen.listen((e) {
       print('DEBUG WS Connected');
       props.webSocket.send('hello');
+    });
+
+    props.webSocket.onClose.listen((e) {
+      print('DEBUG WS Closed');
+      updateStatus(AppStatus.closed);
+      Timer(Duration(seconds:4), () => window.location.reload());
     });
 
   }
@@ -72,23 +80,23 @@ class AppComponent extends UiStatefulComponent<AppProps, AppState> {
 
   @override
   render() {
-
-    if (state.key == null) {
-
-      return (Dom.div()..className = 'container')(
-          Dom.h1()("Wotta ${state.status}")
-      );
-
-    } else {
-      ReactElement canvas = (Dom.canvas()
-        ..height = 400
-        ..width = 400
-        ..id = 'content'
-      )();
-      return canvas;
+    if (state.status == AppStatus.loading) {
+      if (state.key == null) {
+        return (Dom.div()
+          ..className = 'container')(Dom.h1()("Wotta loading..."));
+      } else {
+        ReactElement canvas = (Dom.canvas()
+          ..height = 400
+          ..width = 400
+          ..id = 'content')();
+        return canvas;
+      }
+    } else if (state.status == AppStatus.connected) {
+      return (HomeComponent()..store = state.store)();
+    } else if (state.status == AppStatus.closed) {
+      return (Dom.div()
+        ..className = 'container')(Dom.h1()("Connection to your phone it's lost"));
     }
-
-
   }
 
 // --------------------------------------------------------------------------
@@ -103,13 +111,10 @@ class AppComponent extends UiStatefulComponent<AppProps, AppState> {
 // Public API Methods
 // --------------------------------------------------------------------------
 
-  void updateStatus(String status) =>
-    setState(newState()..status = status
-        ..key = null
-    );
+  void updateStatus(AppStatus status, [Store store]) => setState(newState()
+    ..status = status
+    ..key = null
+    ..store = store);
 
-  void updateKey(String key) =>
-      setState(newState()..key = key);
+  void updateKey(String key) => setState(newState()..key = key);
 }
-
-

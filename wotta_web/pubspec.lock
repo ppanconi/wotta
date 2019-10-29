@@ -357,7 +357,7 @@ packages:
       name: over_react
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.2+dart2"
+    version: "2.6.1+dart2"
   over_react_test:
     dependency: "direct dev"
     description:
@@ -667,7 +667,7 @@ packages:
     source: hosted
     version: "1.0.15"
   wotta_core:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: "../wotta_core"
       relative: true

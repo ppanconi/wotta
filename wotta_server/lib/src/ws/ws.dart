@@ -42,7 +42,7 @@ class WebToAppChannel {
     }
   }
 
-  void addAppConnection(WebSocketChannel appWs) {
+  void addAppConnection(WebSocketChannel appWs, Function onAppWsClose) {
     this.appWS = appWs;
 
     var ready = {
@@ -50,7 +50,14 @@ class WebToAppChannel {
       'key': key
     };
     webWS.sink.add(jsonEncode(ready));
-    webWS.sink.addStream(appWs.stream);
+    webWS.sink.addStream(appWs.stream).whenComplete(() {
+      print('DEBUG App ${key} close web session ');
+      onAppWsClose();
+      webStreamSubscription.cancel();
+      webWS.sink.close();
+      appWs.sink.close();
+    });
+
 
   }
 
@@ -70,9 +77,6 @@ provideWsHandler(Router router) {
     var channel = WebToAppChannel(key, webSocket);
     channels[key] = channel;
 
-//    Timer.periodic(Duration(seconds:5), (Timer t) {
-//      webSocket.sink.add('Plesase login ${++c}');
-//    });
    });
 
   router.get(CONFIG['web_websocket_uri'], webWsHandler);
@@ -84,7 +88,11 @@ provideWsHandler(Router router) {
 
     var channel = channels[key];
     if (channel != null && ! channel.isActive()) {
-      channel.addAppConnection(appSocket);
+
+      channel.addAppConnection(appSocket, () {
+        channels.remove(key);
+
+      });
     } else {
       appSocket.sink.close(1003, 'Invalid key');
     }

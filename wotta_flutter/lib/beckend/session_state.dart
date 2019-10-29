@@ -1,17 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:wotta_core/wotta_core.dart';
+import 'package:built_redux/built_redux.dart';
 
 enum WebRemoteSessionStatus { off, starting, active }
 
 class WebRemoteSession extends ChangeNotifier {
-  WottaAppState appState;
-  WottaActions actions;
+//  WottaAppState appState;
+//  WottaActions actions;
+  Store<WottaAppState, WottaAppStateBuilder, WottaActions> store;
   WebRemoteSessionStatus status = WebRemoteSessionStatus.off;
   WebSocketChannel _ws;
 
-  WebRemoteSession(this.appState, this.actions);
+  WebRemoteSession(this.store);
 
   open(String sessionUrl) {
     print('DEBUG opening remote web session to ${sessionUrl}');
@@ -20,9 +24,21 @@ class WebRemoteSession extends ChangeNotifier {
     _ws.stream.listen(
       (data) {
         print('DEBUG WebRemoteSession get data ${data}');
-        status = WebRemoteSessionStatus.active;
+        var message = json.decode(data);
+        if (message['type'] == 'CHANNEL_READY') {
 
-        notifyListeners();
+          var stateData = json.encode(standardSerializers.serializeWith(WottaAppState.serializer, store.state));
+          var stateDataMsg = {
+            'type': 'STATE_DATA',
+            'data': stateData
+          };
+
+          _ws.sink.add(json.encode(stateDataMsg));
+
+          status = WebRemoteSessionStatus.active;
+          notifyListeners();
+        }
+
       },
       onDone: () {
         debugPrint('ws channel closed');

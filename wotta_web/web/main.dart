@@ -26,7 +26,7 @@ void main() async {
   WebSocket webSocket = WebSocket(wsUri.toString());
 
   AppProps appBuilder = App();
-  appBuilder.initialStatus = 'loading ...';
+  appBuilder.initialStatus = AppStatus.loading;
   appBuilder.webSocket = webSocket;
 
   // Mount / render your component.
