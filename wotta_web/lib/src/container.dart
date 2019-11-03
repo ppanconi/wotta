@@ -1,15 +1,22 @@
 part of './wotta_components.dart';
 
+
 @Factory()
-UiFactory<HomeComponentProps> HomeComponent = _$HomeComponent;
+UiFactory<ContainerProps> Container = _$Container;
 
 @Props()
-class _$HomeComponentProps extends BuiltReduxUiProps<WottaAppState, WottaAppStateBuilder, WottaActions> {
+class _$ContainerProps extends UiProps {
+  WottaAppState state;
+  WottaActions actions;
+}
+
+@State()
+class _$ContainerState extends UiState {
+  String appPart;
 }
 
 @Component()
-class HomeComponentComponent extends BuiltReduxUiComponent<
-    WottaAppState, WottaAppStateBuilder, WottaActions, HomeComponentProps, WottaAppState> {
+class ContainerComponent extends UiStatefulComponent<ContainerProps, ContainerState> {
 // --------------------------------------------------------------------------
 // React Component Specifications and Lifecycle Methods
 // --------------------------------------------------------------------------
@@ -17,28 +24,19 @@ class HomeComponentComponent extends BuiltReduxUiComponent<
   @override
   Map getDefaultProps() => (newProps());
 
-  WottaAppState connect(WottaAppState state) {
-    return state;
-  }
+  @override
+  Map getInitialState() => (
+      newState()..appPart = 'workouts'
+  );
 
   @override
   render() {
-      return (Container()
-          ..state = props.store.state
-          ..actions = props.store.actions
-      )();
-//      return SemanticInput({
-//        "placeholder":'Search...'
-//      });
-//    return (Dom.div()..className = 'container')(
-//        Dom.h1()("Wotta"),
-//        Dom.p()("You have ${props.store.state.workouts.length} workouts")
-//    );
-
+    return SemanticContainer({
+      "style": { "margin": 20 }
+    }, Menu()()
+    );
   }
 
-
-  
 // --------------------------------------------------------------------------
 // Private Utility Methods
 // --------------------------------------------------------------------------
@@ -48,6 +46,6 @@ class HomeComponentComponent extends BuiltReduxUiComponent<
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-// Public A Methods
+// Public API Methods
 // --------------------------------------------------------------------------
 }
