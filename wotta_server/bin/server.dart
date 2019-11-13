@@ -36,6 +36,17 @@ main(List<String> args) async {
 
   var cascade = Cascade();
 
+  Router router = Router();
+  provideWsHandler(router);
+  provideApplicationApi(router, '/api');
+  // We  can catch all verbs and use a URL-parameter with a regular expression
+  // that matches everything to catch app.
+  router.all('/<ignored|.*>', (Request request) {
+    return Response.notFound('Page not found');
+  });
+
+  cascade = cascade.add(router.handler);
+
   if (webdev != 'NO') {
     var ssePath  = '/\$sseHandler';
     final proxySse = SseProxyHandler(Uri.parse(ssePath),
@@ -50,12 +61,6 @@ main(List<String> args) async {
       var staticHandler = createStaticHandler(static, defaultDocument: 'index.html');
       cascade = cascade.add(staticHandler);
   }
-
-  Router router = Router();
-  provideWsHandler(router);
-  provideApplicationApi(router, '/api');
-
-  cascade = cascade.add(router.handler);
 
   var handler = const Pipeline()
       .addMiddleware(logRequests())
