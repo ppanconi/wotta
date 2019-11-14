@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import AppState from "../state/State";
 import SubjectProvider from "../state/SubjectProvider";
-import { Dimmer, Loader, Segment, Transition, Grid, Header, Image, Message } from 'semantic-ui-react';
-import QRCode from 'qrcode.react';
+import { Dimmer, Loader, Segment, Transition, Grid, Header, Image, Icon } from 'semantic-ui-react';
+import Login from "./Login";
+import Layout from "./Layout";
+import Logout from "./Logout";
 
 class Main extends Component {
     render() {
@@ -11,41 +13,27 @@ class Main extends Component {
                 <SubjectProvider subject={this.context.remoteSessionStateSubject}>
                     { ({data}) =>  (
                         <div>
-                        {(function(appState) {
+                        {(function() {
                             switch(data) {
                                 case 0:
                                     return (
                                         <Segment>
                                             <Dimmer active page inverted>
-                                                <Loader>Loading</Loader>
+                                                <Loader size='massive' style={{color:'teal'}}>Loading</Loader>
                                             </Dimmer>
                                         </Segment>
                                         )
                                 case 5:
-                                    return <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-                                        <Grid.Column style={{ maxWidth: 220 }}>
-                                            <Header as='h3' color='teal' textAlign='center'>
-                                                Log-in by your phone
-                                            </Header>
-                                            <Transition transitionOnMount={true} animation='scale' duration={500}>
-                                                <QRCode value={appState.qrCodeValue}
-                                                        size={200}
-                                                        level={"Q"}
-                                                        renderAs={"svg"}/>
-                                            </Transition>
-                                        </Grid.Column>
-                                    </Grid>
+                                    return <Login/>
                                 case 10:
-                                    return <div>{data}</div>
+                                    return <Layout/>
                                 case 20:
-                                    return <div>Remote session closed...</div>
+                                    return <Logout/>
                                 default:
                                     return null;
                             }
-                        })(this.context)}
+                        })()}
                         </div>
-
-
                     )}
                 </SubjectProvider>
             </div>

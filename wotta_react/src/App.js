@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';
+// import './App.css';
 import Main from "./components/Main";
 import { webSocket } from "rxjs/webSocket";
 import { State, AppState } from "./state/State";
@@ -49,9 +49,7 @@ class App extends Component {
     render() {
         return (
             <AppState.Provider value={this.appState}>
-                <Container>
-                    <Main></Main>
-                </Container>
+                <Main></Main>
             </AppState.Provider>
         );
     }
