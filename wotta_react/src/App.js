@@ -28,12 +28,10 @@ class App extends Component {
             this.appState.config = config;
 
             console.log(`config ${JSON.stringify(config)}`);
-            const url = window.location.href;
+            const url = new URL(window.location.href);
+            console.log(url);
 
-            const wsUrl = new URL(url);
-            wsUrl.protocol = 'ws';
-            wsUrl.pathname = config.web_websocket_uri;
-
+            const wsUrl = new URL('ws://' + url.host + config.web_websocket_uri);
             console.log(wsUrl);
 
             this.wsSubject = webSocket(wsUrl.href);

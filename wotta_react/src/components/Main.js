@@ -24,7 +24,7 @@ class Main extends Component {
                                         </Segment>
                                         )
                                 case 5:
-                                    return <Login/>
+                                    return <Layout/>
                                 case 10:
                                     return <Layout/>
                                 case 20:

@@ -8,15 +8,14 @@
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
     "rxjs": "^6.5.3",
-    "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.1",
     "unstated": "^2.1.1"
   },
   "scripts": {
-    "start": "react-scripts start --no-cache",
-    "build": "react-scripts build",
-    "test": "react-scripts test --no-cache",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +31,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^5.6.2",
+    "@semantic-ui-react/craco-less": "^1.1.0",
+    "semantic-ui-less": "^2.4.1"
   }
 }
