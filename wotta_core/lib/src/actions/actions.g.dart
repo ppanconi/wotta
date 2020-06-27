@@ -46,6 +46,8 @@ class _$WottaActions extends WottaActions {
   final ActionDispatcher<WorkoutExecution> deleteExecutionAction =
       new ActionDispatcher<WorkoutExecution>(
           'WottaActions-deleteExecutionAction');
+  final ActionDispatcher<Null> increaseSateVersionAction =
+      new ActionDispatcher<Null>('WottaActions-increaseSateVersionAction');
 
   @override
   void setDispatcher(Dispatcher dispatcher) {
@@ -62,6 +64,7 @@ class _$WottaActions extends WottaActions {
     saveWorkoutExecution.setDispatcher(dispatcher);
     restoreExecutionAction.setDispatcher(dispatcher);
     deleteExecutionAction.setDispatcher(dispatcher);
+    increaseSateVersionAction.setDispatcher(dispatcher);
   }
 }
 
@@ -94,4 +97,6 @@ class WottaActionsNames {
       new ActionName<WorkoutExecution>('WottaActions-restoreExecutionAction');
   static final ActionName<WorkoutExecution> deleteExecutionAction =
       new ActionName<WorkoutExecution>('WottaActions-deleteExecutionAction');
+  static final ActionName<Null> increaseSateVersionAction =
+      new ActionName<Null>('WottaActions-increaseSateVersionAction');
 }

@@ -36,11 +36,14 @@ abstract class WottaAppState implements Built<WottaAppState, WottaAppStateBuilde
   @BuiltValueField(serialize: false)
   Executor get executor;
 
+  int get version;
+
   WottaAppState._();
 
   factory WottaAppState([updates(WottaAppStateBuilder b)]) => _$WottaAppState((bulder) => bulder
     ..statusReport = ''
     ..status = 0
+    ..version = 0
     ..workouts = ListBuilder<Workout>([])
     ..update(updates)
   );

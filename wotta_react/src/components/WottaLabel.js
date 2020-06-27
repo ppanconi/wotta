@@ -1,17 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Menu} from "semantic-ui-react";
 
 const WottaLabel = props => {
+
+    const stl = {};
+    if (props.color) {
+        stl.color = props.color;
+    }
+
     return (
-        <span>
-            <i><b>W</b></i>otta
+        <span style={stl}>
+            <i><b>W</b></i>ott<i><b>A</b></i>
         </span>
     );
 };
 
 WottaLabel.propTypes = {
-
+    color: PropTypes.string
 };
 
 export default WottaLabel;

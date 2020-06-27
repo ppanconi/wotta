@@ -29,6 +29,8 @@ abstract class WottaActions extends ReduxActions {
   ActionDispatcher<WorkoutExecution> restoreExecutionAction;
   ActionDispatcher<WorkoutExecution> deleteExecutionAction;
 
+  ActionDispatcher<Null> increaseSateVersionAction;
+
   WottaActions._();
 
   factory WottaActions() => _$WottaActions();

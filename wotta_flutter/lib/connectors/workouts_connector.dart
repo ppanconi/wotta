@@ -38,8 +38,7 @@ class AddWorkoutConnector extends StoreConnector<WottaAppState, WottaActions, Wo
 
   @override
   Workout connect(WottaAppState state) {
-    assert(state.creatingWorkout != null);
-    return state.creatingWorkout;
+    return state.creatingWorkout ?? new Workout((b) =>  b..title = '');
   }
 
 }

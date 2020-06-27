@@ -18,8 +18,13 @@ var wottaReducerBuilder = new ReducerBuilder<WottaAppState, WottaAppStateBuilder
   ..add(WottaActionsNames.saveWorkoutExecution, saveExecution)
   ..add(WottaActionsNames.deleteExecutionAction, deleteExecution)
   ..add(WottaActionsNames.restoreExecutionAction, restoreExecution)
+  ..add(WottaActionsNames.increaseSateVersionAction, increaseSateVersion)
 
 ;
+
+void increaseSateVersion(WottaAppState state, Action action, WottaAppStateBuilder builder) {
+  builder.version = state.version + 1;
+}
 
 InnerWorkoutExecution _togglePauseExecutionItem(Executor executor, [bool toComplete = false]) {
 

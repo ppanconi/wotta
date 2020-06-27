@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Main from "./components/Main";
 import { webSocket } from "rxjs/webSocket";
 import { State, AppState } from "./state/State";
-import { Container } from 'semantic-ui-react'
 
 class App extends Component {
     constructor(props, context) {
@@ -17,7 +16,7 @@ class App extends Component {
 
     async getConfigNConnect() {
 
-        console.log('DEBUG calling api config ...');
+        // console.log('DEBUG calling api config ...');
 
         const path = 'api/config';
         try {
@@ -27,12 +26,10 @@ class App extends Component {
 
             this.appState.config = config;
 
-            console.log(`config ${JSON.stringify(config)}`);
+            // console.log(`DEBUG config ${JSON.stringify(config)}`);
             const url = new URL(window.location.href);
-            console.log(url);
 
             const wsUrl = new URL('ws://' + url.host + config.web_websocket_uri);
-            console.log(wsUrl);
 
             this.wsSubject = webSocket(wsUrl.href);
             this.appState.openSession(this.wsSubject);

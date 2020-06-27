@@ -68,9 +68,14 @@ NextActionHandler savingOnFileMiddleware(MiddlewareApi api) =>
         (ActionHandler next) => (Action action) {
       final prevState = api.state;
       next(action);
+      print(action.name);
       if (prevState != api.state) {
-        fileStorage.writeState(api.state);
-        print('state saved to file');
+        if (action.name == 'WottaActions-increaseSateVersionAction') {
+          fileStorage.writeState(api.state);
+          print('state saved to file');
+        } else {
+          (api.actions as WottaActions).increaseSateVersionAction();
+        }
       }
     };
 

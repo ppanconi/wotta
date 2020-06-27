@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import AppState from "../state/State";
 import SubjectProvider from "../state/SubjectProvider";
-import { Dimmer, Loader, Segment, Transition, Grid, Header, Image, Icon } from 'semantic-ui-react';
+import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import Login from "./Login";
 import Layout from "./Layout";
 import Logout from "./Logout";
@@ -11,10 +11,10 @@ class Main extends Component {
         return (
             <div>
                 <SubjectProvider subject={this.context.remoteSessionStateSubject}>
-                    { ({data}) =>  (
+                    { ({data: state}) =>  (
                         <div>
                         {(function() {
-                            switch(data) {
+                            switch(state) {
                                 case 0:
                                     return (
                                         <Segment>
@@ -24,7 +24,7 @@ class Main extends Component {
                                         </Segment>
                                         )
                                 case 5:
-                                    return <Layout/>
+                                    return <Login/>
                                 case 10:
                                     return <Layout/>
                                 case 20:

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 
 class SubjectProvider extends Component {
 
@@ -10,25 +10,13 @@ class SubjectProvider extends Component {
         super(props);
         this.state = {
             snapshot : {
-                data: null,
+                data: this.props.initialValue || null,
                 connectionState: -1,
                 error : null,
             }
         };
 
         this.subscription = null;
-    }
-
-    componentWillMount() {
-        if(this.props.initialValue != null  && this.state.snapshot.connectionState === -1){
-            this.setState({
-                snapshot : {
-                    data: this.props.initialValue,
-                    connectionState: -1,
-                    error : null,
-                }
-            })
-        }
     }
 
     componentDidMount() {
@@ -68,7 +56,7 @@ class SubjectProvider extends Component {
     }
 
     render() {
-        return(
+        return (
             this.props.children(this.state.snapshot)
         );
     }

@@ -176,7 +176,7 @@ class WorkoutDetailView extends StatelessWidget {
       {@required Key key,
       @required this.workout,
       @required this.confirmCallback})
-      : assert(workout != null), super(key: key);
+      : super(key: key);
 
   bool _isEditing() => workout.isSaved();
 

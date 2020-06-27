@@ -27,6 +27,8 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
       serializers.serialize(object.executions,
           specifiedType: const FullType(
               BuiltList, const [const FullType(WorkoutExecution)])),
+      'version',
+      serializers.serialize(object.version, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -56,6 +58,10 @@ class _$WottaAppStateSerializer implements StructuredSerializer<WottaAppState> {
                       BuiltList, const [const FullType(WorkoutExecution)]))
               as BuiltList<dynamic>);
           break;
+        case 'version':
+          result.version = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -78,6 +84,8 @@ class _$WottaAppState extends WottaAppState {
   final EntityEditingStatus currentEditingStatus;
   @override
   final Executor executor;
+  @override
+  final int version;
 
   factory _$WottaAppState([void Function(WottaAppStateBuilder) updates]) =>
       (new WottaAppStateBuilder()..update(updates)).build();
@@ -89,13 +97,17 @@ class _$WottaAppState extends WottaAppState {
       this.executions,
       this.creatingWorkout,
       this.currentEditingStatus,
-      this.executor})
+      this.executor,
+      this.version})
       : super._() {
     if (workouts == null) {
       throw new BuiltValueNullFieldError('WottaAppState', 'workouts');
     }
     if (executions == null) {
       throw new BuiltValueNullFieldError('WottaAppState', 'executions');
+    }
+    if (version == null) {
+      throw new BuiltValueNullFieldError('WottaAppState', 'version');
     }
   }
 
@@ -116,7 +128,8 @@ class _$WottaAppState extends WottaAppState {
         executions == other.executions &&
         creatingWorkout == other.creatingWorkout &&
         currentEditingStatus == other.currentEditingStatus &&
-        executor == other.executor;
+        executor == other.executor &&
+        version == other.version;
   }
 
   @override
@@ -125,12 +138,14 @@ class _$WottaAppState extends WottaAppState {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
-                        workouts.hashCode),
-                    executions.hashCode),
-                creatingWorkout.hashCode),
-            currentEditingStatus.hashCode),
-        executor.hashCode));
+                    $jc(
+                        $jc($jc($jc(0, status.hashCode), statusReport.hashCode),
+                            workouts.hashCode),
+                        executions.hashCode),
+                    creatingWorkout.hashCode),
+                currentEditingStatus.hashCode),
+            executor.hashCode),
+        version.hashCode));
   }
 
   @override
@@ -142,7 +157,8 @@ class _$WottaAppState extends WottaAppState {
           ..add('executions', executions)
           ..add('creatingWorkout', creatingWorkout)
           ..add('currentEditingStatus', currentEditingStatus)
-          ..add('executor', executor))
+          ..add('executor', executor)
+          ..add('version', version))
         .toString();
   }
 }
@@ -186,6 +202,10 @@ class WottaAppStateBuilder
   ExecutorBuilder get executor => _$this._executor ??= new ExecutorBuilder();
   set executor(ExecutorBuilder executor) => _$this._executor = executor;
 
+  int _version;
+  int get version => _$this._version;
+  set version(int version) => _$this._version = version;
+
   WottaAppStateBuilder();
 
   WottaAppStateBuilder get _$this {
@@ -197,6 +217,7 @@ class WottaAppStateBuilder
       _creatingWorkout = _$v.creatingWorkout?.toBuilder();
       _currentEditingStatus = _$v.currentEditingStatus?.toBuilder();
       _executor = _$v.executor?.toBuilder();
+      _version = _$v.version;
       _$v = null;
     }
     return this;
@@ -227,7 +248,8 @@ class WottaAppStateBuilder
               executions: executions.build(),
               creatingWorkout: _creatingWorkout?.build(),
               currentEditingStatus: _currentEditingStatus?.build(),
-              executor: _executor?.build());
+              executor: _executor?.build(),
+              version: version);
     } catch (_) {
       String _$failedField;
       try {

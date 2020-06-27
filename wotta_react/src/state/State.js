@@ -72,19 +72,19 @@ export class State {
 
             if (msg.type === 'KEY') {
 
-                console.log('DEBUG recieved key ' + msg.key);
+                // console.log('DEBUG received key ' + msg.key);
                 this.key = msg.key;
 
             } else if (msg.type === 'CHANNEL_READY') {
 
-                console.log('DEBUG channel is ready');
+                // console.log('DEBUG channel is ready');
                 // replay with the same channel ready
                 this.sessionSubject.next(msg);
 
             } else if (msg.type === 'STATE_DATA') {
 
-                console.log('DEBUG data state received');
-                this.data = msg.data;
+                console.log(`DEBUG data state received ${msg.data}`);
+                this.data = JSON.parse(msg.data);
             }
         },
         err => console.log(err),
