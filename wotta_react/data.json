@@ -1,0 +1,23 @@
+{
+  "workouts": [
+    {
+      "title": "legs heavy",
+      "uniformWorkoutDefinition": {
+        "warmupDurationSecs": 180,
+        "activityDefinition": {
+          "numberOfSeries": 3,
+          "manualStopSerie": true,
+          "manualStopRest": false,
+          "serieDurationSecs": 30,
+          "restDurationSecs": 45
+        },
+        "numberOfActivity": 9,
+        "interActivityRestDurationSec": 75,
+        "calldownDurationSecs": 180
+      },
+      "id": "06ba0d48-4bee-4076-a106-02e60369ac1b",
+      "notes": "Heavy legs workout Mass and strength improvement"
+    }
+  ],
+  "executions": []
+}
