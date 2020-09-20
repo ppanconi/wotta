@@ -13,9 +13,17 @@ class WebRemoteSession extends ChangeNotifier {
 //  WottaActions actions;
   Store<WottaAppState, WottaAppStateBuilder, WottaActions> store;
   WebRemoteSessionStatus status = WebRemoteSessionStatus.off;
+  String _message = "Off";
   WebSocketChannel _ws;
 
   WebRemoteSession(this.store);
+
+  set message(String value) {
+    _message = value;
+    notifyListeners();
+  }
+
+  String get message => _message;
 
   open(String sessionUrl) {
     print('DEBUG opening remote web session to ${sessionUrl}');
@@ -36,6 +44,7 @@ class WebRemoteSession extends ChangeNotifier {
           _ws.sink.add(json.encode(stateDataMsg));
 
           status = WebRemoteSessionStatus.active;
+          _message = "Active";
           notifyListeners();
         }
 
@@ -43,16 +52,19 @@ class WebRemoteSession extends ChangeNotifier {
       onDone: () {
         debugPrint('ws channel closed');
         status = WebRemoteSessionStatus.off;
+        _message = "Off";
         notifyListeners();
       },
       onError: (error) {
         debugPrint('ws error $error');
         status = WebRemoteSessionStatus.off;
+        _message = "Error $error";
         notifyListeners();
       },
     );
 
     status = WebRemoteSessionStatus.starting;
+    _message = "Starting ...";
     notifyListeners();
   }
 
@@ -61,6 +73,7 @@ class WebRemoteSession extends ChangeNotifier {
       _ws.sink.close();
     }
     status = WebRemoteSessionStatus.off;
+    _message = "Off";
     notifyListeners();
   }
 
