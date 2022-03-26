@@ -1,0 +1,31 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# It's contains kafka services containers
+version: '3.8'
+services:
+  wotta-server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: wotta_compose:0.1.1
+    deploy:
+      mode: replicated
+      replicas: 3
+    environment:
+      - PORT=8080
+    expose:
+      - "8080"
+    networks:
+      - app-tier
+  gateway:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - wotta-server
+    ports:
+      - "4000:4000"
+    networks:
+      - app-tier
+networks:
+  app-tier:
+    driver: bridge
