@@ -15,10 +15,10 @@ import 'package:shelf_proxy/shelf_proxy.dart';
 main(List<String> args) async {
   var parser = ArgParser()
     ..addOption('port', abbr: 'p', defaultsTo: '8080')
-    ..addOption('static', abbr: 's', defaultsTo: '../wotta_web/build')
+    ..addOption('static', abbr: 's', defaultsTo: '../wotta_react/build')
 //    ..addOption('static', abbr: 's', defaultsTo: 'NO')
     ..addOption('webdev', abbr: 'd', defaultsTo: 'NO');
-//    ..addOption('webdev', abbr: 'd', defaultsTo: 'http://localhost:53322');
+//    ..addOption('webdev', abbr: 'd', defaultsTo: 'http://localhost:3000');
 
   var result = parser.parse(args);
 

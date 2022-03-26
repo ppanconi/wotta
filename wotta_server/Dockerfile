@@ -18,7 +18,7 @@ RUN pub get
 ADD wotta_server/bin /app/bin/
 ADD wotta_server/lib /app/lib/
 RUN pub get --offline
-ADD wotta_web/build /app/web
+ADD wotta_react/build /app/web
 RUN dart2aot /app/bin/server.dart /app/server.dart.aot
 
 CMD []

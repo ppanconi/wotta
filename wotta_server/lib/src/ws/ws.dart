@@ -79,7 +79,9 @@ provideWsHandler(Router router) {
 
    });
 
-  router.get(CONFIG['web_websocket_uri'], webWsHandler);
+  var webWSUrl = CONFIG()['web_websocket_uri'];
+  print("INFO open websocket for web side at " + webWSUrl);
+  router.get(webWSUrl, webWsHandler);
 
   var appWsHandler = enhanceWebSocketHandler((WebSocketChannel appSocket, Request request ) {
 
@@ -98,6 +100,8 @@ provideWsHandler(Router router) {
     }
   });
 
-  router.get(CONFIG['app_websocket_uri'], appWsHandler);
+  var appWSUrl = CONFIG()['app_websocket_uri'];
+  print("INFO open websocket for app side at " + appWSUrl);
+  router.get(appWSUrl, appWsHandler);
 
 }

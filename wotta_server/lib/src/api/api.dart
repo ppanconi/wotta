@@ -13,5 +13,5 @@ provideApplicationApi(Router router, String prefix) {
 
 Response configHandler(Request request) {
 
-  return Response.ok(jsonEncode(CONFIG));
+  return Response.ok(jsonEncode(CONFIG()));
 }
